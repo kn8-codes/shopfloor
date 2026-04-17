@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShopFloor — Neighborhood repair network</title>
+  <style>
+    :root {
+      --bg: #0d0f12;
+      --panel: #161a20;
+      --panel-2: #1c222b;
+      --text: #ece7dc;
+      --muted: #9da7b3;
+      --line: #2a313d;
+      --accent: #f59e0b;
+      --accent-2: #67e8f9;
+      --good: #34d399;
+      --warn: #fbbf24;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+      background: linear-gradient(180deg, #0a0c0f 0%, #11151a 100%);
+      color: var(--text);
+    }
+    .wrap { max-width: 1240px; margin: 0 auto; padding: 24px; }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.25fr 1fr;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    .card {
+      background: rgba(22,26,32,.92);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.28);
+    }
+    .eyebrow {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: .12em;
+      font-size: 12px;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font-size: 48px; line-height: 1.02; margin-bottom: 14px; }
+    .lede { color: var(--muted); font-size: 18px; line-height: 1.55; max-width: 64ch; }
+    .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+    .chip {
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+    }
+    .city-grid {
+      min-height: 280px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background:
+        linear-gradient(rgba(103,232,249,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(103,232,249,.08) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(245,158,11,.08), rgba(245,158,11,.02));
+      background-size: 28px 28px, 28px 28px, auto;
+      position: relative;
+      overflow: hidden;
+    }
+    .node {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: var(--accent);
+      border-radius: 999px;
+      box-shadow: 0 0 0 6px rgba(245,158,11,.08);
+    }
+    .label {
+      position: absolute;
+      color: var(--muted);
+      font-size: 12px;
+      background: rgba(13,15,18,.8);
+      padding: 4px 6px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+    }
+    .section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+    .muted { color: var(--muted); }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 24px; }
+    .request { display: grid; gap: 12px; }
+    .meta { display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; color: var(--muted); }
+    .pill { padding: 6px 10px; border-radius: 999px; background: #202733; border: 1px solid var(--line); }
+    .urgent { color: #111; background: var(--warn); border-color: transparent; font-weight: 700; }
+    .profile { display: grid; gap: 14px; }
+    .tools, .skills { display: flex; flex-wrap: wrap; gap: 8px; }
+    .field-note {
+      border-left: 3px solid var(--good);
+      padding-left: 12px;
+    }
+    .footer-note {
+      color: var(--muted);
+      font-size: 13px;
+      text-align: center;
+      padding: 10px 0 24px;
+    }
+    @media (max-width: 960px) {
+      .hero, .grid-3 { grid-template-columns: 1fr; }
+      h1 { font-size: 36px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="card">
+        <div class="eyebrow">ShopFloor / Akron alpha</div>
+        <h1>When something breaks, start with the neighborhood.</h1>
+        <p class="lede">
+          ShopFloor is a local repair and survival network for people who keep life running with borrowed tools,
+          practical know-how, and whatever grit is left after the day job. Ask for help, offer help, leave behind a field note.
+        </p>
+        <div class="chips">
+          <div class="chip">Car trouble</div>
+          <div class="chip">Housing repair</div>
+          <div class="chip">Tool borrow</div>
+          <div class="chip">Ride help</div>
+          <div class="chip">Paperwork</div>
+          <div class="chip">Appliance rescue</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="eyebrow">Neighborhood network</div>
+        <div class="city-grid">
+          <div class="node" style="left:18%;top:26%"></div><div class="label" style="left:21%;top:22%">Highland Square</div>
+          <div class="node" style="left:57%;top:20%"></div><div class="label" style="left:60%;top:16%">North Hill</div>
+          <div class="node" style="left:34%;top:54%"></div><div class="label" style="left:37%;top:50%">West Akron</div>
+          <div class="node" style="left:69%;top:62%"></div><div class="label" style="left:72%;top:58%">Ellet</div>
+          <div class="node" style="left:48%;top:78%"></div><div class="label" style="left:51%;top:74%">Firestone Park</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid-3">
+      <div class="card request">
+        <div class="section-head"><h2>Open request</h2><span class="muted">What broke</span></div>
+        <h3>Need help replacing a dead battery clamp before tomorrow’s school run</h3>
+        <div class="meta">
+          <span class="pill">Car</span>
+          <span class="pill">Kenmore</span>
+          <span class="pill urgent">Urgent</span>
+        </div>
+        <p class="muted">2008 Focus won’t hold connection on the positive terminal. Have tools but not the part, and I’m trying not to miss work again.</p>
+      </div>
+
+      <div class="card profile">
+        <div class="section-head"><h2>Shop card</h2><span class="muted">Who can help</span></div>
+        <div>
+          <h3 style="margin-bottom:6px">@jlibertytools</h3>
+          <div class="muted">West Akron • barter / depends</div>
+        </div>
+        <div>
+          <div class="muted" style="margin-bottom:8px">Skills</div>
+          <div class="skills">
+            <span class="pill">Brake jobs</span>
+            <span class="pill">Battery / alternator</span>
+            <span class="pill">Minor appliance repair</span>
+          </div>
+        </div>
+        <div>
+          <div class="muted" style="margin-bottom:8px">Tools</div>
+          <div class="tools">
+            <span class="pill">Code scanner</span>
+            <span class="pill">Jack + stands</span>
+            <span class="pill">Portable jump pack</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card field-note">
+        <div class="section-head"><h2>Field note</h2><span class="muted">What worked</span></div>
+        <h3>Fridge wasn’t dying, the outlet GFCI was half-tripped</h3>
+        <p class="muted">Checked voltage first, reset the bathroom GFCI upstream, cleaned the plug, fridge came back. Zero-dollar fix. Ten minutes. Safe.</p>
+        <div class="meta">
+          <span class="pill">Housing</span>
+          <span class="pill">North Hill</span>
+          <span class="pill">$0</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <h2>What kind of app is this?</h2>
+        <span class="muted">Not a gig app. Not a feed.</span>
+      </div>
+      <p class="lede" style="max-width:none">
+        ShopFloor is for cities where people survive through favors, side knowledge, and learning how to fix what’s in front of them.
+        The product is not content. The product is visible local usefulness.
+      </p>
+    </section>
+
+    <div class="footer-note">Mock landing shell / built to test tone, information hierarchy, and visual language.</div>
+  </div>
+</body>
+</html>
