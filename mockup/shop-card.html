@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShopFloor — Shop card</title>
+  <style>
+    :root { --bg:#0d0f12; --panel:#161a20; --text:#ece7dc; --muted:#9da7b3; --line:#2a313d; --accent:#f59e0b; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Inter,system-ui,sans-serif; background:var(--bg); color:var(--text); }
+    .wrap { max-width:1000px; margin:0 auto; padding:24px; }
+    .card { background:var(--panel); border:1px solid var(--line); border-radius:18px; padding:22px; }
+    .header { display:grid; grid-template-columns: 100px 1fr; gap:20px; align-items:center; }
+    .avatar { width:100px; height:100px; border-radius:20px; background:linear-gradient(135deg,#2a313d,#1b2128); border:1px solid var(--line); }
+    .pill, .stat { display:inline-flex; padding:8px 11px; border-radius:999px; background:#202733; border:1px solid var(--line); color:var(--muted); margin:0 8px 8px 0; }
+    h1,h2,h3,p { margin-top:0; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:20px; }
+    .muted { color:var(--muted); }
+    @media (max-width: 800px){ .grid,.header { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="header">
+        <div class="avatar"></div>
+        <div>
+          <h1>@jlibertytools</h1>
+          <p class="muted">West Akron • barter / depends • visible local history</p>
+          <div>
+            <span class="stat">12 completed helps</span>
+            <span class="stat">6 field notes</span>
+            <span class="stat">Tool lender</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div>
+          <h2>What I can help with</h2>
+          <span class="pill">Battery / alternator</span>
+          <span class="pill">Brake jobs</span>
+          <span class="pill">Minor appliance repair</span>
+          <span class="pill">Reading codes</span>
+        </div>
+        <div>
+          <h2>What I’ve got</h2>
+          <span class="pill">Jack + stands</span>
+          <span class="pill">Socket set</span>
+          <span class="pill">Code scanner</span>
+          <span class="pill">Jump pack</span>
+        </div>
+        <div>
+          <h2>What I need help with</h2>
+          <p class="muted">Body work, drywall, and anything involving clean paperwork at city offices.</p>
+        </div>
+        <div>
+          <h2>How I work</h2>
+          <p class="muted">Usually evenings. Fine with barter. If it’s a quick fix and I’m around, I’d rather just help than make it weird.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
