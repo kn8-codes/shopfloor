@@ -40,8 +40,8 @@
         {/each}
       </div>
       <div class="actions">
-        <a class="primary" href="/how-it-works">How it works</a>
-        <a class="secondary" href="/how-it-works#screens">See the product shape</a>
+        <a class="primary" href="/feed">Open the neighborhood feed</a>
+        <a class="secondary" href="/feed">Open the neighborhood feed</a>
       </div>
     </div>
     <div class="network card inset">
