@@ -32,6 +32,8 @@
       <div class="eyebrow">ShopFloor / Akron alpha</div>
       {#if !data.appConfig.supabaseEnabled}
         <p class="config-note">Supabase client not configured yet. Add public env keys to enable auth and real data.</p>
+      {:else if data.connection && !data.connection.ok}
+        <p class="connection-note">Supabase is configured but not healthy yet: {data.connection.error}</p>
       {/if}
       <h1>When something breaks, start with the neighborhood.</h1>
       <p class="lede">
@@ -110,6 +112,7 @@
   h3 { color: #9da7b3; font-size: 14px; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
   .lede, .muted, p { color: #9da7b3; line-height: 1.55; }
   .config-note { color:#f5c96a; max-width:52ch; margin-top:10px; }
+  .connection-note { color:#ffb4b4; max-width:56ch; margin-top:10px; }
   .chips, .meta, .actions { display: flex; flex-wrap: wrap; gap: 10px; }
   .chips { margin-top: 18px; }
   .chip, .meta span {
