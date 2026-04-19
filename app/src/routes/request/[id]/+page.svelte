@@ -21,15 +21,19 @@
 
     <div class="section card">
       <div class="minihead">Responses</div>
-      {#each data.request.responses as response}
-        <div class="response">
-          <div class="meta tight">
-            <span>{response.response_type}</span>
-            <span>@{response.author?.handle ?? 'unknown'}</span>
+      {#if data.request.responses?.length}
+        {#each data.request.responses as response}
+          <div class="response">
+            <div class="meta tight">
+              <span>{response.response_type}</span>
+              <span>@{response.author?.handle ?? 'unknown'}</span>
+            </div>
+            <p>{response.message}</p>
           </div>
-          <p>{response.message}</p>
-        </div>
-      {/each}
+        {/each}
+      {:else}
+        <p>No responses yet.</p>
+      {/if}
     </div>
 
     <div class="section callout">

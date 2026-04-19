@@ -1,5 +1,5 @@
-import { getProfileBundle } from '$lib/data/sample';
+import { loadShopCard } from '$lib/server/shopfloor';
 
-export function load({ params }) {
-  return getProfileBundle(params.handle) ?? { profile: null, tools: [], fieldNotes: [] };
+export async function load({ params }) {
+  return (await loadShopCard(params.handle)) ?? { profile: null, tools: [], fieldNotes: [] };
 }

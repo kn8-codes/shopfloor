@@ -32,28 +32,40 @@
 
       <section class="card">
         <div class="minihead">Needs help with</div>
-        <div class="chips">{#each data.profile.needs as need}<span>{need}</span>{/each}</div>
+        {#if data.profile.needs?.length}
+          <div class="chips">{#each data.profile.needs as need}<span>{need}</span>{/each}</div>
+        {:else}
+          <p class="section-copy">Nothing listed yet.</p>
+        {/if}
       </section>
     </div>
 
     <section class="card section">
       <div class="minihead">Tools and resources</div>
       <p class="section-copy">Structured inventory with lendable and availability flags, but no full lending logistics yet.</p>
-      <div class="stack">
-        {#each data.tools as tool}
-          <ToolCard {tool} />
-        {/each}
-      </div>
+      {#if data.tools?.length}
+        <div class="stack">
+          {#each data.tools as tool}
+            <ToolCard {tool} />
+          {/each}
+        </div>
+      {:else}
+        <p class="section-copy">Tool inventory not wired to live data yet.</p>
+      {/if}
     </section>
 
     <section class="card section">
       <div class="minihead">Field notes</div>
       <p class="section-copy">Field notes lead the trust signal. The work is real when the fix is legible.</p>
-      <div class="stack">
-        {#each data.fieldNotes as note}
-          <FieldNoteCard {note} />
-        {/each}
-      </div>
+      {#if data.fieldNotes?.length}
+        <div class="stack">
+          {#each data.fieldNotes as note}
+            <FieldNoteCard {note} />
+          {/each}
+        </div>
+      {:else}
+        <p class="section-copy">No field notes yet.</p>
+      {/if}
     </section>
   </div>
 {:else}

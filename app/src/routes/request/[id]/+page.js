@@ -1,5 +1,5 @@
-import { getRequestById } from '$lib/data/sample';
+import { loadRequestDetail } from '$lib/server/shopfloor';
 
-export function load({ params }) {
-  return { request: getRequestById(params.id) };
+export async function load({ params }) {
+  return { request: await loadRequestDetail(params.id) };
 }
