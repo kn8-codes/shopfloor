@@ -67,3 +67,71 @@ export async function createHelpRequest(payload) {
 
   return data;
 }
+
+
+/** @param {string} rawTools */
+function parseTools(rawTools) {
+  return rawTools
+    .split(',')
+    .map((item) => item.trim())
+    .filter(Boolean);
+}
+
+/** @param {{
+ * handle: string,
+ * display_name: string,
+ * neighborhood: string,
+ * bio: string,
+ * skills: string[],
+ * toolsText: string
+ * }} payload */
+export async function upsertMyShopCard(payload) {
+  if (!supabaseEnabled || !supabase) {
+    throw new Error('Supabase is not configured yet.');
+  }
+
+  const user = await getCurrentUser();
+  if (!user) {
+    throw new Error('You need to sign in first.');
+  }
+
+  const normalizedHandle = payload.handle.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+  const tools = parseTools(payload.toolsText);
+
+  const { data, error } = await supabase
+    .from('shop_cards')
+    .upsert({
+      id: user.id,
+      handle: normalizedHandle,
+      display_name: payload.display_name.trim(),
+      neighborhood: payload.neighborhood.trim(),
+      bio: payload.bio.trim(),
+      skills: payload.skills,
+      help_style: 'depends',
+      contact_pref: 'in_app',
+      is_visible: true
+    })
+    .select('handle')
+    .single();
+
+  if (error) throw error;
+
+  return {
+    handle: data.handle,
+    tools
+  };
+}
+
+/** @param {string} handle */
+export async function getShopCardByHandle(handle) {
+  if (!supabaseEnabled || !supabase) return null;
+
+  const { data, error } = await supabase
+    .from('shop_cards')
+    .select('*')
+    .eq('handle', handle)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data;
+}

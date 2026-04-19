@@ -7,6 +7,7 @@
     { href: '/feed', label: 'Feed' },
     { href: '/field-notes', label: 'Field notes' },
     { href: '/new-request', label: 'New request' },
+    { href: '/shop/new', label: 'Shop card' },
     { href: '/how-it-works', label: 'How it works' }
   ];
 </script>
