@@ -1,5 +1,9 @@
 <script>
+  import { goto } from '$app/navigation';
   import { categoryOptions, urgencyOptions } from '$lib/data/sample';
+  import { authState } from '$lib/stores/auth';
+  import { createHelpRequest, getMyShopCard } from '$lib/api';
+  import { supabaseEnabled } from '$lib/supabase';
 
   const defaults = {
     title: '',
@@ -12,6 +16,10 @@
   };
 
   let form = $state({ ...defaults });
+  let status = $state('idle');
+  let message = $state('');
+  let shopCardStatus = $state('loading');
+  let hasShopCard = $state(false);
 
   /** @type {Record<string, string>} */
   const categoryLabels = {
@@ -25,6 +33,61 @@
     kid_family: 'Kid / family',
     other: 'Other'
   };
+
+  async function refreshShopCardState() {
+    if (!$authState.user || !supabaseEnabled) {
+      hasShopCard = false;
+      shopCardStatus = 'idle';
+      return;
+    }
+
+    shopCardStatus = 'loading';
+
+    try {
+      const shopCard = await getMyShopCard();
+      hasShopCard = Boolean(shopCard);
+      if (shopCard?.neighborhood) form.neighborhood = shopCard.neighborhood;
+      shopCardStatus = 'ready';
+    } catch (error) {
+      hasShopCard = false;
+      shopCardStatus = 'error';
+      message = error instanceof Error ? error.message : 'Could not check shop card state.';
+    }
+  }
+
+  $effect(() => {
+    refreshShopCardState();
+  });
+
+  /** @param {SubmitEvent} event */
+  async function handleSubmit(event) {
+    event.preventDefault();
+    message = '';
+
+    if (!$authState.user) {
+      status = 'error';
+      message = 'Sign in first.';
+      return;
+    }
+
+    if (!hasShopCard) {
+      status = 'error';
+      message = 'Create your shop card before posting a request.';
+      return;
+    }
+
+    status = 'submitting';
+
+    try {
+      const created = await createHelpRequest(form);
+      status = 'success';
+      message = 'Request posted.';
+      await goto(`/request/${created.id}`);
+    } catch (error) {
+      status = 'error';
+      message = error instanceof Error ? error.message : 'Could not post request.';
+    }
+  }
 </script>
 
 <svelte:head>
@@ -40,7 +103,17 @@
     </div>
   </div>
 
-  <form class="card form" onsubmit={(event) => event.preventDefault()}>
+  {#if !supabaseEnabled}
+    <div class="card notice warn">Supabase is not configured yet, so this page is still in prototype mode.</div>
+  {:else if !$authState.user}
+    <div class="card notice">Sign in first, then come back here to post a request.</div>
+  {:else if shopCardStatus === 'loading'}
+    <div class="card notice">Checking your shop card…</div>
+  {:else if !hasShopCard}
+    <div class="card notice warn">You need a shop card before posting a request. That setup flow is the next thing to wire.</div>
+  {/if}
+
+  <form class="card form" onsubmit={handleSubmit}>
     <label>
       <span>Title</span>
       <input bind:value={form.title} maxlength="140" placeholder="Need help replacing a dead battery clamp before morning" />
@@ -92,14 +165,20 @@
       <input bind:checked={form.safe_to_share} type="checkbox" />
       <div>
         <strong>Safe to share publicly</strong>
-        <p>Uncheck this if the request needs to stay more private when real auth + backend wiring lands.</p>
+        <p>Uncheck this if the request needs to stay more private when real backend wiring lands.</p>
       </div>
     </label>
 
     <div class="actions">
-      <button type="submit">Post request</button>
-      <span class="note">Prototype only for now, no backend submission yet.</span>
+      <button type="submit" disabled={!supabaseEnabled || !$authState.user || !hasShopCard || status === 'submitting'}>
+        {status === 'submitting' ? 'Posting...' : 'Post request'}
+      </button>
+      <span class="note">Posting is live once Supabase env and schema are in place.</span>
     </div>
+
+    {#if message}
+      <p class:success={status === 'success'} class:error={status === 'error'}>{message}</p>
+    {/if}
   </form>
 
   <section class="card preview">
@@ -119,5 +198,5 @@
 </div>
 
 <style>
-  .page{max-width:980px;margin:0 auto;padding:24px}.header{margin-bottom:22px}.eyebrow,.minihead{color:#f59e0b;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:700}h1{margin:10px 0 12px}.card{background:rgba(22,26,32,.94);border:1px solid #2a313d;border-radius:18px;padding:20px}.form{display:grid;gap:18px}.two-up{display:grid;grid-template-columns:1fr 1fr;gap:16px}label{display:grid;gap:8px}label span{color:#ece7dc;font-weight:700}input,textarea,select{width:100%;box-sizing:border-box;background:#11151a;border:1px solid #2a313d;border-radius:12px;padding:12px 14px;color:#ece7dc;font:inherit}textarea{resize:vertical}.checkbox-row{grid-template-columns:auto 1fr;align-items:flex-start;gap:12px}.checkbox-row input{width:auto;margin-top:3px}.checkbox-row p,.note,.budget,.visibility,.page p{color:#9da7b3;line-height:1.6}.actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}button{background:#f59e0b;color:#111;border:0;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer}.preview{margin-top:18px}.meta{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.meta span{padding:7px 10px;border-radius:999px;background:#1c222b;border:1px solid #2a313d;color:#9da7b3}.urgent{background:#fbbf24 !important;color:#111 !important;border-color:transparent !important;font-weight:700}@media (max-width:800px){.two-up{grid-template-columns:1fr}}
+  .page{max-width:980px;margin:0 auto;padding:24px}.header{margin-bottom:22px}.eyebrow,.minihead{color:#f59e0b;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:700}h1{margin:10px 0 12px}.card{background:rgba(22,26,32,.94);border:1px solid #2a313d;border-radius:18px;padding:20px}.form{display:grid;gap:18px}.notice{margin-bottom:18px;color:#9da7b3}.warn{color:#f5c96a}.two-up{display:grid;grid-template-columns:1fr 1fr;gap:16px}label{display:grid;gap:8px}label span{color:#ece7dc;font-weight:700}input,textarea,select{width:100%;box-sizing:border-box;background:#11151a;border:1px solid #2a313d;border-radius:12px;padding:12px 14px;color:#ece7dc;font:inherit}textarea{resize:vertical}.checkbox-row{grid-template-columns:auto 1fr;align-items:flex-start;gap:12px}.checkbox-row input{width:auto;margin-top:3px}.checkbox-row p,.note,.budget,.visibility,.page p{color:#9da7b3;line-height:1.6}.actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}button{background:#f59e0b;color:#111;border:0;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer}button:disabled{opacity:.55;cursor:not-allowed}.preview{margin-top:18px}.meta{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.meta span{padding:7px 10px;border-radius:999px;background:#1c222b;border:1px solid #2a313d;color:#9da7b3}.urgent{background:#fbbf24 !important;color:#111 !important;border-color:transparent !important;font-weight:700}.success{color:#73e2aa}.error{color:#ff9c9c}@media (max-width:800px){.two-up{grid-template-columns:1fr}}
 </style>
