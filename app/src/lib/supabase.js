@@ -15,3 +15,27 @@ export const supabase = supabaseEnabled
       }
     })
   : null;
+
+export async function getConnectionShape() {
+  if (!supabaseEnabled || !supabase) {
+    return {
+      configured: false,
+      ok: false,
+      table: 'shop_cards',
+      count: null,
+      error: 'Missing PUBLIC_SUPABASE_URL or PUBLIC_SUPABASE_ANON_KEY'
+    };
+  }
+
+  const { count, error } = await supabase
+    .from('shop_cards')
+    .select('*', { count: 'exact', head: true });
+
+  return {
+    configured: true,
+    ok: !error,
+    table: 'shop_cards',
+    count: count ?? 0,
+    error: error?.message ?? null
+  };
+}

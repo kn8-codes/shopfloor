@@ -1,5 +1,8 @@
 import { appConfig } from '$lib/config/app';
+import { getConnectionShape } from '$lib/supabase';
 
-export function load() {
-  return { appConfig };
+export async function load() {
+  const connection = await getConnectionShape();
+
+  return { appConfig, connection };
 }
