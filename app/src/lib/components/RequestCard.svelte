@@ -6,13 +6,13 @@
   <div class="meta">
     <span>{request.category}</span>
     <span>{request.neighborhood}</span>
-    <span class:urgent={request.urgency === 'Urgent'}>{request.urgency}</span>
+    <span class:urgent={request.urgency === 'urgent'}>{request.urgency}</span>
   </div>
   <h3>{request.title}</h3>
   <p>{request.body}</p>
   <div class="foot">
-    <span>{request.author}</span>
-    <span>{request.postedAgo}</span>
+    <span>@{request.author.handle}</span>
+    <span>{request.created_at_label}</span>
   </div>
 </a>
 

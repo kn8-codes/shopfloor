@@ -1,5 +1,8 @@
 <script>
-  import { fieldNotes } from '$lib/data/sample';
+  import { field_notes, getProfileById } from '$lib/data/sample';
+  import FieldNoteCard from '$lib/components/FieldNoteCard.svelte';
+
+  const notes = field_notes.map((note) => ({ ...note, author: getProfileById(note.author_id) })).filter((note) => note.author);
 </script>
 
 <svelte:head><title>ShopFloor — Field notes</title></svelte:head>
@@ -9,30 +12,20 @@
     <div>
       <div class="eyebrow">Field notes</div>
       <h1>Keep the fix. Don’t lose it in the group chat.</h1>
+      <p>Field notes are the public proof that something useful happened. In this direction, resolved requests should produce one before they close.</p>
     </div>
-    <a class="btn" href="/">Home</a>
   </div>
   <div class="stack">
-    {#each fieldNotes as note}
-      <article class="card">
-        <div class="meta">
-          <span>{note.category}</span>
-          <span>{note.neighborhood}</span>
-          <span>{note.safety}</span>
-          <span>{note.cost}</span>
-        </div>
-        <h2>{note.title}</h2>
-        <p>{note.body}</p>
-        <p class="muted">Time: {note.time}</p>
-      </article>
+    {#each notes as note}
+      <div>
+        <FieldNoteCard {note} />
+        <p class="author">By <a href={`/shop/${note.author?.handle ?? ''}`}>@{note.author?.handle ?? 'unknown'}</a></p>
+      </div>
     {/each}
   </div>
 </div>
 
 <style>
-  :global(body){margin:0;font-family:Inter,system-ui,sans-serif;background:#0d0f12;color:#ece7dc}.page{max-width:980px;margin:0 auto;padding:24px}.header{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:24px}
-  .eyebrow{color:#f59e0b;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:700}.btn{text-decoration:none;padding:12px 14px;border-radius:12px;background:#f59e0b;color:#111;font-weight:700}
-  .stack{display:grid;gap:16px}.card{background:rgba(22,26,32,.94);border:1px solid #2a313d;border-left:3px solid #34d399;border-radius:18px;padding:20px}.meta{display:flex;flex-wrap:wrap;gap:8px}.meta span{padding:7px 10px;border-radius:999px;background:#1c222b;border:1px solid #2a313d;color:#9da7b3}
-  p,.muted{color:#9da7b3;line-height:1.6}
-  @media (max-width:900px){.header{flex-direction:column}}
+  .page{max-width:980px;margin:0 auto;padding:24px}.header{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:24px}
+  .eyebrow{color:#f59e0b;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:700}.stack{display:grid;gap:16px}p{color:#9da7b3;line-height:1.6}.author{margin:8px 6px 0}.author a{color:#9da7b3}
 </style>

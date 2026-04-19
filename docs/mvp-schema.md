@@ -25,7 +25,6 @@ Represents a person’s public shop card.
 - `contact_pref text not null default 'in_app'`
 - `skills text[] not null default '{}'`
 - `needs text[] not null default '{}'`
-- `tools text[] not null default '{}'`
 - `is_visible boolean not null default true`
 - `completed_help_count integer not null default 0`
 - `field_note_count integer not null default 0`
@@ -97,19 +96,22 @@ Structured knowledge artifact created after something gets solved.
 
 ---
 
-## 6. resource_listings
-Tools and useful assets people can lend/share.
+## 6. tools
+Structured tool and resource inventory attached to a shop card.
 
 ### Fields
 - `id uuid primary key default gen_random_uuid()`
-- `owner_id uuid not null references profiles(id) on delete cascade`
-- `title text not null`
+- `profile_id uuid not null references profiles(id) on delete cascade`
+- `name text not null`
+- `category text`
 - `description text`
-- `category text not null`
-- `neighborhood text not null`
-- `availability_note text`
-- `is_active boolean not null default true`
+- `condition text`
+- `lendable boolean not null default false`
+- `availability_status text not null default 'available'` — `available`, `limited`, `unavailable`
+- `neighborhood text`
+- `notes text`
 - `created_at timestamptz not null default now()`
+- `updated_at timestamptz not null default now()`
 
 ---
 
@@ -143,10 +145,10 @@ No public score humiliation nonsense.
 - profiles readable if `is_visible = true`
 - users can edit only their own profile
 - help requests readable to signed-in users by default
-- request authors can edit/close their own requests
+- request authors can edit/close their own requests, but resolved requests should require a field note unless explicitly exempted for safety/privacy
 - responses writable by authenticated users
 - field notes writable by authenticated users
-- resource listings writable by owners
+- tools writable by owners
 
 ---
 

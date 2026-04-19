@@ -1,6 +1,5 @@
-import { helpers } from '$lib/data/sample';
+import { getProfileBundle } from '$lib/data/sample';
 
 export function load({ params }) {
-  const helper = helpers.find((item) => item.handle === params.handle);
-  return { helper };
+  return getProfileBundle(params.handle) ?? { profile: null, tools: [], fieldNotes: [] };
 }
