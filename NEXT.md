@@ -39,6 +39,9 @@ Repo: `https://github.com/kn8-codes/shopfloor`
   - `supabase/schema.sql`
 
 ## Most recent key commits
+- `978ae94` — Load ShopFloor pages from Supabase when available
+- `c2aef66` — Simplify ShopFloor Supabase env example
+- `1f85f15` — Merge remote Supabase health check changes
 - `b41a365` — Add ShopFloor shop card creation flow
 - `fdc26bd` — Wire ShopFloor request submission flow
 - `5f905cb` — Add ShopFloor Magic Link auth scaffold
@@ -64,6 +67,8 @@ If Supabase env keys are present and schema is applied:
 - user can create/update a shop card
 - user can attempt to create a help request
 - request posting is correctly gated behind shop card existence
+- `/shop/[handle]` tries live Supabase data first, then seed fallback
+- `/request/[id]` tries live Supabase data first, then seed fallback
 
 ## Current gaps / blockers
 1. **Schema and frontend mismatch on tools**
@@ -71,32 +76,27 @@ If Supabase env keys are present and schema is applied:
    - `supabase/schema.sql` does not yet persist a dedicated tools table in this sprint version
    - structured tool inventory still needs to be reintroduced cleanly or explicitly deferred
 
-2. **Shop page still leans on prototype sample data**
-   - `/shop/[handle]` is still rendering from seed-oriented route assumptions
-   - needs a real Supabase-backed load path for newly created shop cards
+2. **Live-backed pages are partial, not complete**
+   - `/shop/[handle]` and `/request/[id]` now try Supabase first
+   - both still fall back to seed data
+   - live request responses and live tools are not wired yet
 
-3. **Request detail page is not yet fully real-data safe**
-   - request creation redirects to `/request/:id`
-   - page exists, but the real-data load path needs verification against Supabase ids, not just seed data
-
-4. **No onboarding polish / recovery path yet**
+3. **No onboarding polish / recovery path yet**
    - after login, users still need a clearer path: create shop card → post request
 
 5. **No deploy verification yet**
    - app behavior has not been tested end-to-end against a live Supabase project and Vercel deployment
 
 ## Highest-priority next moves
-1. Make `/shop/[handle]` load real shop cards from Supabase
-2. Make `/request/[id]` load real requests from Supabase
-3. Verify end-to-end flow with actual env keys and live schema:
+1. Verify end-to-end flow with actual env keys and live schema:
    - Magic Link sign-in
    - create shop card
    - create request
    - redirect to real request detail page
-4. Decide whether to:
+2. Decide whether to:
    - add `tools` table now, or
    - explicitly defer structured tools to next sprint and stop pretending they are live
-5. Add a simple post-login routing rule:
+3. Add a simple post-login routing rule:
    - no shop card → `/shop/new`
    - has shop card → `/new-request` or `/feed`
 
@@ -107,6 +107,7 @@ The right move is to finish the first real user loop:
 2. shop card
 3. request posting
 4. real request page
+5. live verification
 
 Keep it lean.
 Do not add image upload, ratings, reservations, or logistics systems.
