@@ -1,0 +1,20 @@
+project: ShopFloor
+status: active
+phase: audit
+owner: nate
+created: 2026-05-24
+required_files:
+  - PROJECT_CHARTER.md
+  - AGENTS.md
+  - STATE.md
+  - docs/DECISIONS.md
+  - docs/EVIDENCE.md
+required_dirs:
+  - work/inbox
+  - work/active
+  - work/blocked
+  - work/done
+review:
+  stale_after_hours: 48
+  require_state_before_work: true
+  require_plan_for_multi_step: true
