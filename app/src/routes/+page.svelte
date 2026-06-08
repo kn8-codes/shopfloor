@@ -47,7 +47,7 @@
       </div>
       <div class="actions">
         <a class="primary" href="/feed">Open the neighborhood feed</a>
-        <a class="secondary" href="/feed">Open the neighborhood feed</a>
+        <a class="secondary" href="/how-it-works">See how it works</a>
       </div>
     </div>
     <div class="network card inset">

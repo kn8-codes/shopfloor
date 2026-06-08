@@ -223,6 +223,11 @@ export function getProfileBundle(handle) {
   return {
     profile,
     tools: tools.filter((tool) => tool.profile_id === profile.id),
-    fieldNotes: field_notes.filter((note) => note.author_id === profile.id)
+    fieldNotes: field_notes.filter((note) => note.author_id === profile.id),
+    timeSummary: {
+      hoursHelped: 0,
+      hoursReceived: 0
+    },
+    timeHistory: []
   };
 }

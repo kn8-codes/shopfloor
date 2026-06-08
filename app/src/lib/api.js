@@ -68,6 +68,113 @@ export async function createHelpRequest(payload) {
   return data;
 }
 
+/** @param {{ request_id: string, response_type: string, message: string }} payload */
+export async function createRequestResponse(payload) {
+  if (!supabaseEnabled || !supabase) {
+    throw new Error('Supabase is not configured yet.');
+  }
+
+  const user = await getCurrentUser();
+  if (!user) {
+    throw new Error('You need to sign in first.');
+  }
+
+  const shopCard = await getMyShopCard();
+  if (!shopCard) {
+    throw new Error('Create your shop card before responding to a request.');
+  }
+
+  const { data, error } = await supabase
+    .from('request_responses')
+    .insert({
+      request_id: payload.request_id,
+      author_id: user.id,
+      response_type: payload.response_type,
+      message: payload.message.trim()
+    })
+    .select('id')
+    .single();
+
+  if (error) throw error;
+
+  return data;
+}
+
+/** @param {{ request_id: string, response_id?: string | null, hours?: number | string | null, ledger_note?: string | null }} payload */
+export async function completeHelpRequest(payload) {
+  if (!supabaseEnabled || !supabase) {
+    throw new Error('Supabase is not configured yet.');
+  }
+
+  const user = await getCurrentUser();
+  if (!user) {
+    throw new Error('You need to sign in first.');
+  }
+
+  let completedHelperId = null;
+  let completedResponseId = null;
+  let hours = null;
+
+  if (payload.response_id) {
+    const { data: response, error: responseError } = await supabase
+      .from('request_responses')
+      .select('id, author_id, request_id')
+      .eq('id', payload.response_id)
+      .eq('request_id', payload.request_id)
+      .maybeSingle();
+
+    if (responseError) throw responseError;
+    if (!response) {
+      throw new Error('Selected response was not found for this request.');
+    }
+
+    completedHelperId = response.author_id;
+    completedResponseId = response.id;
+
+    if (completedHelperId === user.id) {
+      throw new Error('Select someone else as the helper before recording hours.');
+    }
+
+    hours = Number(payload.hours);
+
+    if (!Number.isFinite(hours) || hours < 0.25 || hours > 24) {
+      throw new Error('Enter hours helped between 0.25 and 24.');
+    }
+  }
+
+  const { data, error } = await supabase
+    .from('help_requests')
+    .update({
+      status: 'resolved',
+      completed_at: new Date().toISOString(),
+      completed_by: user.id,
+      completed_helper_id: completedHelperId,
+      completed_response_id: completedResponseId
+    })
+    .eq('id', payload.request_id)
+    .eq('author_id', user.id)
+    .select('id')
+    .single();
+
+  if (error) throw error;
+
+  // History, not money: one completed request may record one help-hours receipt.
+  if (completedHelperId && hours !== null) {
+    const { error: ledgerError } = await supabase.from('time_ledger_entries').insert({
+      request_id: payload.request_id,
+      response_id: completedResponseId,
+      requester_id: user.id,
+      helper_id: completedHelperId,
+      confirmed_by: user.id,
+      hours,
+      note: payload.ledger_note?.trim() || null
+    });
+
+    if (ledgerError) throw ledgerError;
+  }
+
+  return data;
+}
 
 /** @param {string} rawTools */
 function parseTools(rawTools) {

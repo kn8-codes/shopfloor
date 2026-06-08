@@ -9,7 +9,7 @@
     <span class:urgent={request.urgency === 'urgent'}>{request.urgency}</span>
   </div>
   <h3>{request.title}</h3>
-  <p>{request.body}</p>
+  <p>{request.body ?? request.description}</p>
   <div class="foot">
     <span>@{request.author.handle}</span>
     <span>{request.created_at_label}</span>

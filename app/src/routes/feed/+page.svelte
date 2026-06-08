@@ -1,8 +1,7 @@
 <script>
-  import { getRequestsForFeed } from '$lib/data/sample';
   import RequestCard from '$lib/components/RequestCard.svelte';
 
-  const requests = getRequestsForFeed();
+  let { data = { requests: [] } } = $props();
 </script>
 
 <svelte:head><title>ShopFloor — Neighborhood feed</title></svelte:head>
@@ -18,7 +17,7 @@
   </div>
 
   <div class="grid">
-    {#each requests as request}
+    {#each data.requests as request}
       <RequestCard {request} />
     {/each}
   </div>

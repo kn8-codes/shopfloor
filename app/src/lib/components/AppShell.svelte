@@ -39,5 +39,9 @@
 </div>
 
 <style>
+  :global(html){background:#0d0f12;color-scheme:dark}
+  :global(body){margin:0;background:#0d0f12;color:#ece7dc;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+  :global(button),:global(input),:global(textarea),:global(select){font:inherit}
+  :global(a){color:inherit}
   .shell{min-height:100vh;background:#0d0f12;color:#ece7dc}.topbar{max-width:1100px;margin:0 auto;padding:18px 24px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px}.brand{text-decoration:none;color:#ece7dc;font-weight:800;letter-spacing:.03em}nav{display:flex;flex-wrap:wrap;gap:12px}nav a{text-decoration:none;color:#9da7b3;padding:8px 10px;border-radius:10px}nav a:hover{background:#161a20;color:#ece7dc}.auth-slot{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:flex-end}.auth-link,.auth-state{color:#9da7b3;text-decoration:none;font-size:14px}.auth-button{background:#1c222b;color:#ece7dc;border:1px solid #2a313d;border-radius:10px;padding:8px 10px;font:inherit;cursor:pointer}.muted{color:#6f7a86}main{padding-bottom:48px}@media (max-width:800px){.topbar{grid-template-columns:1fr;align-items:flex-start}.auth-slot{justify-content:flex-start}}
 </style>
