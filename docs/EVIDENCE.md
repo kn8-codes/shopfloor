@@ -146,3 +146,11 @@ Record receipts here. Agent narration is not evidence. Pretty words are how bugs
 - File/path/link: `/Users/kn8/projects/shopfloor`; branch `feat/time-bank-loop-mvp`; dev server route probe source `http://127.0.0.1:5173`.
 - Checked by: Egon at 2026-06-08 04:36 EDT
 - Remaining risk: live Supabase/browser two-user verification is still not complete; completion update plus ledger insert is not atomic yet and should become a Postgres RPC before broader alpha.
+
+
+## 2026-06-08 — Sprint one inventory and week plan written
+
+- Command/source: inspected `STATE.md`, `NEXT.md`, `docs/plans/2026-05-25-shopfloor-sprint-table.md`, `supabase/schema.sql`, `app/src/lib/api.js`, `app/src/lib/server/shopfloor.js`; ran `git status --short --branch`, `git log -1 --oneline --decorate`, `npm run check`; probed Supabase table/view availability with anon key without printing secrets; ran local Vite route smoke for live-backed routes.
+- Result: Repo clean at commit `3094e63`; `svelte-check found 0 errors and 0 warnings`; live Supabase has two shop cards, one open request, one helper response, and zero ledger entries; live route smoke returned HTTP 200 for feed, shop profiles, request detail, field notes, new request, shop new, and login. Wrote granular one-week execution plan.
+- File/path/link: `/Users/kn8/projects/shopfloor/docs/plans/2026-06-08-shopfloor-sprint-one-inventory-and-week-plan.md`
+- Checked by: Egon at 2026-06-08 08:36 EDT
