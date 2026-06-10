@@ -13,6 +13,20 @@ Record receipts here. Agent narration is not evidence. Pretty words are how bugs
 - Checked by:
 ```
 
+## 2026-06-09 — Code review truth correction
+
+- Command/source: Fable 5/Claude code review of `main` at `2db884f`; Egon verified with `grep -RIn "request_responses\|time_ledger_entries"` across M1, Venkman, Janine, and Winston worktrees.
+- Result: `request_responses`, request completion, and `time_ledger_entries` are not present in current app/schema code. Mentions exist only in sample data, older docs/evidence, and planned schema docs. Treat 2026-05-25 evidence entries below as historical/stranded claims, not current HEAD truth, unless a future commit restores that implementation.
+- File/path/link: `NEXT.md`; `STATE.md`; `supabase/schema.sql`; `app/src/lib/server/shopfloor.js`; peer paths `/Users/kn8/projects/shopfloor`, `/home/kn8/projects/shopfloor`, `/Users/kn8.claw/projects/shopfloor`
+- Checked by: Egon at 2026-06-09
+
+## 2026-06-09 — Fleet stranded-work check for responses/ledger
+
+- Command/source: checked `git status --short --branch`, `git branch --all --verbose --no-abbrev`, and recursive grep for `time_ledger_entries` / `request_responses` on Venkman, Janine, and Winston.
+- Result: all three peers were clean on `main...origin/main`; no implementation branch or dirty work containing response/ledger code was found. Venkman had only the old KB feature branch. Janine and Winston had only `main` plus remote refs.
+- File/path/link: Venkman `/Users/kn8/projects/shopfloor`; Janine `/home/kn8/projects/shopfloor`; Winston `/Users/kn8.claw/projects/shopfloor`
+- Checked by: Egon at 2026-06-09
+
 ## 2026-05-24 — Repository cloned and identified
 
 - Command/source: `gh repo clone kn8-codes/shopfloor /Users/kn8/projects/shopfloor`; `gh repo view kn8-codes/shopfloor`

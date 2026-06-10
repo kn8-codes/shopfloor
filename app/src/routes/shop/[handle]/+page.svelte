@@ -7,9 +7,14 @@
 
 <svelte:head><title>ShopFloor — {data.profile?.display_name ?? 'Shop card'}</title></svelte:head>
 
-{#if data.profile}
+{#if data.error}
+  <div class="page"><div class="notice error">{data.error}</div></div>
+{:else if data.profile}
   <div class="page">
     <a class="back" href="/feed">← Back to feed</a>
+    {#if data.demo}
+      <div class="notice demo">Sample data — this is not a real neighbor.</div>
+    {/if}
     <div class="card hero">
       <div>
         <div class="eyebrow">Shop card</div>
@@ -73,5 +78,5 @@
 {/if}
 
 <style>
-  .page{max-width:980px;margin:0 auto;padding:24px}.back{color:#9da7b3;text-decoration:none;display:inline-block;margin-bottom:16px}.card{background:rgba(22,26,32,.94);border:1px solid #2a313d;border-radius:18px;padding:20px}.hero{display:grid;grid-template-columns:1.4fr .9fr;gap:20px}.eyebrow,.minihead{color:#f59e0b;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:700}.neighborhood{font-size:18px;color:#ece7dc}.stats,.chips{display:flex;flex-wrap:wrap;gap:10px;align-content:flex-start}.stats span,.chips span{padding:8px 11px;border-radius:999px;background:#1c222b;border:1px solid #2a313d;color:#9da7b3}.section-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.section{margin-top:18px}.section-copy,p{color:#9da7b3;line-height:1.6}.stack{display:grid;gap:14px;margin-top:14px}h1{margin:10px 0}@media (max-width:900px){.hero,.section-grid{grid-template-columns:1fr}}
+  .page{max-width:980px;margin:0 auto;padding:24px}.back{color:#9da7b3;text-decoration:none;display:inline-block;margin-bottom:16px}.notice{border-radius:14px;padding:12px 14px;margin-bottom:14px;font-weight:700}.notice.demo{background:#1c222b;border:1px solid #f59e0b;color:#fbbf24}.notice.error{background:#2a1515;border:1px solid #f87171;color:#fecaca}.card{background:rgba(22,26,32,.94);border:1px solid #2a313d;border-radius:18px;padding:20px}.hero{display:grid;grid-template-columns:1.4fr .9fr;gap:20px}.eyebrow,.minihead{color:#f59e0b;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:700}.neighborhood{font-size:18px;color:#ece7dc}.stats,.chips{display:flex;flex-wrap:wrap;gap:10px;align-content:flex-start}.stats span,.chips span{padding:8px 11px;border-radius:999px;background:#1c222b;border:1px solid #2a313d;color:#9da7b3}.section-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.section{margin-top:18px}.section-copy,p{color:#9da7b3;line-height:1.6}.stack{display:grid;gap:14px;margin-top:14px}h1{margin:10px 0}@media (max-width:900px){.hero,.section-grid{grid-template-columns:1fr}}
 </style>

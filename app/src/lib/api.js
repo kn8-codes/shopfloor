@@ -95,7 +95,12 @@ export async function upsertMyShopCard(payload) {
     throw new Error('You need to sign in first.');
   }
 
-  const normalizedHandle = payload.handle.trim().toLowerCase().replace(/[^a-z0-9_]/g, '');
+  const rawHandle = payload.handle.trim().toLowerCase();
+  if (!/^[a-z0-9_]{3,32}$/.test(rawHandle)) {
+    throw new Error('Handle must be 3–32 characters using lowercase letters, numbers, or underscores.');
+  }
+  const normalizedHandle = rawHandle;
+
   const tools = parseTools(payload.toolsText);
 
   const { data, error } = await supabase

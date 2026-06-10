@@ -14,11 +14,11 @@ Current mission frame: **Aid is the visible action. Relationship is the infrastr
 
 Repo: `https://github.com/kn8-codes/shopfloor`  
 Canonical branch: `main`  
-Current Sprint 1 main HEAD after KB MVP push: `8a6d550 fix: run shopfloor route loads on server`
+Current verified HEAD before this review-fix branch: `2db884f docs: update shopfloor sprint state`
 
 ShopFloor has a SvelteKit app under `app/`, Supabase schema under `supabase/schema.sql`, product docs under `docs/`, and a file-backed Markdown knowledge base under `app/src/lib/content/kb/`.
 
-## What is done
+## What is done at current HEAD
 
 Prototype routes exist and render:
 
@@ -41,12 +41,25 @@ Current app capabilities:
 - Magic Link auth scaffold exists.
 - Shop card creation/upsert flow exists.
 - Help request creation flow exists and requires a shop card.
-- Feed, shop detail, and request detail try live Supabase first, then sample fallback.
-- Request responses have schema/RLS, live read support, and a request-detail response form/action.
-- Request authors can mark requests resolved, optionally selecting a helper response.
-- Completed helper responses can create a simple `time_ledger_entries` history record with hours helped/received.
-- Shop profiles render simple time history: hours helped, hours received, and raw receipts.
+- Feed currently renders sample requests.
+- Shop detail and request detail load live Supabase records when available.
+- Sample fallback exists only for demo/no-Supabase mode and should be visibly labeled.
 - Markdown knowledge base MVP exists with wiki-style links and starter tool/guide/concept content.
+
+## What is not implemented yet
+
+The following are **open work**, not current code:
+
+- `request_responses` table and RLS policies.
+- Live request response form/action.
+- Request completion flow.
+- `time_ledger_entries` table/history.
+- Atomic completion-to-ledger RPC.
+- Shop profile time history.
+- Field note creation route/form.
+- Structured tools/resources persistence.
+
+If another agent sees older evidence claiming those exist, treat that as historical drift until a commit containing the code is found.
 
 ## Knowledge base MVP
 
@@ -96,13 +109,13 @@ Implementation files:
 
 ## Current gaps / blockers
 
-1. **Live completion → ledger verification still needed**
-   - Code exists for completion and helper-hours ledger creation.
-   - Live Supabase/browser end-to-end verification is not complete.
+1. **Truth integrity after review**
+   - State docs have been corrected so they no longer describe response/completion/ledger code as present.
+   - Peer machines were checked; no stranded implementation was found outside `main`.
 
-2. **Completion + ledger insert is not atomic yet**
-   - Current client helper updates `help_requests` first and inserts `time_ledger_entries` second.
-   - This is acceptable for MWP, but should become a Postgres RPC before broader alpha.
+2. **Live database privacy verification**
+   - `supabase/schema.sql` should set `help_requests_with_author` to `security_invoker = true` so RLS applies through the view.
+   - Live Supabase must still be migrated/verified with anon-key checks.
 
 3. **Structured tools/resources mismatch**
    - Product docs say tools are core.
@@ -128,10 +141,11 @@ Use GitHub `main` as the morning truth.
 
 Next good work slices:
 
-1. Preview/deploy the Knowledge Base MVP so Nate can edit against the real surface.
-2. Turn the ShopFloor relationships/public-statement draft into About/mission page copy.
-3. Add a simple field-note creation path or prepare the next bounded task card for it.
-4. Decide whether structured tools/resources wait until after the public alpha surface is visible.
+1. Finish the code-review fixes: truth docs, privacy view setting, honest demo fallback.
+2. Preview/deploy the Knowledge Base MVP so Nate can edit against the real surface.
+3. Turn the ShopFloor relationships/public-statement draft into About/mission page copy.
+4. Add a simple field-note creation path or prepare the next bounded task card for it.
+5. Decide whether structured tools/resources wait until after the public alpha surface is visible.
 
 ## If another agent picks this up
 
@@ -141,7 +155,8 @@ Start from `main`, read:
 
 1. `docs/KNOWLEDGE_BASE_IMPLEMENTATION.md`
 2. this `NEXT.md`
-3. `README.md`
-4. relevant route/content files under `app/src/`
+3. `STATE.md`
+4. `README.md`
+5. relevant route/content files under `app/src/`
 
 Then make the smallest useful improvement and record evidence.

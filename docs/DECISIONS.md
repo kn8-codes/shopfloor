@@ -105,6 +105,23 @@ The curated KB has enough entries that search/filtering, editorial workflow, or 
 **Source:**  
 `docs/KNOWLEDGE_BASE_IMPLEMENTATION.md`; Sprint 1 conversation 2026-06-09.
 
+## 2026-06-09 — Review fixes protect truth and trust
+
+**Decision:**  
+Code review red flags should be handled before more alpha surface work: reconcile docs to actual `main`, set Supabase views to run as security invoker, constrain handles at the database level, and label demo/sample fallback data visibly.
+
+**Why:**  
+ShopFloor depends on trust. False state docs waste agent time, a security-definer view can bypass the intended `safe_to_share` privacy gate, unconstrained handles can break routes or create lookalikes, and fictional sample neighbors must not impersonate real people.
+
+**Alternatives rejected:**  
+Leaving the issues as comments, relying on client-only validation, silently falling back to sample data on Supabase errors, or building new features on top of a false map.
+
+**Revisit when:**  
+The live Supabase database has been migrated and verified with anon-key tests, and the app has a proper demo mode or seed-data story.
+
+**Source:**  
+2026-06-09 code review; verified by Egon against `main` and peer worktrees.
+
 ## 2026-06-09 — Relationship is the infrastructure
 
 **Decision:**  

@@ -35,6 +35,8 @@ create table if not exists public.shop_cards (
     check (help_style in ('paid', 'barter', 'volunteer', 'depends')),
   constraint shop_cards_handle_length_check
     check (char_length(handle) between 3 and 32),
+  constraint shop_cards_handle_format_check
+    check (handle ~ '^[a-z0-9_]{3,32}$'),
   constraint shop_cards_bio_length_check
     check (char_length(bio) between 1 and 500)
 );
@@ -43,6 +45,21 @@ create trigger set_shop_cards_updated_at
 before update on public.shop_cards
 for each row
 execute function public.set_updated_at();
+
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_constraint
+    where conname = 'shop_cards_handle_format_check'
+      and conrelid = 'public.shop_cards'::regclass
+  ) then
+    alter table public.shop_cards
+      add constraint shop_cards_handle_format_check
+      check (handle ~ '^[a-z0-9_]{3,32}$');
+  end if;
+end;
+$$;
 
 -- 2. help_requests
 create table if not exists public.help_requests (
@@ -237,3 +254,5 @@ select
   sc.neighborhood as author_neighborhood
 from public.help_requests hr
 join public.shop_cards sc on sc.id = hr.author_id;
+
+alter view public.help_requests_with_author set (security_invoker = true);

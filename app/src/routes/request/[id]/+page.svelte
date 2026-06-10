@@ -4,9 +4,14 @@
 
 <svelte:head><title>ShopFloor — {data.request?.title ?? 'Request'}</title></svelte:head>
 
-{#if data.request}
+{#if data.error}
+  <div class="page"><div class="notice error">{data.error}</div></div>
+{:else if data.request}
   <div class="page">
     <a class="back" href="/feed">← Back to feed</a>
+    {#if data.demo || data.request.demo}
+      <div class="notice demo">Sample data — this is not a real request.</div>
+    {/if}
     <div class="card">
       <div class="meta">
         <span>{data.request.category}</span>
@@ -46,7 +51,7 @@
 {/if}
 
 <style>
-  .page{max-width:900px;margin:0 auto;padding:24px}.back{color:#9da7b3;text-decoration:none;display:inline-block;margin-bottom:16px}
+  .page{max-width:900px;margin:0 auto;padding:24px}.back{color:#9da7b3;text-decoration:none;display:inline-block;margin-bottom:16px}.notice{border-radius:14px;padding:12px 14px;margin-bottom:14px;font-weight:700}.notice.demo{background:#1c222b;border:1px solid #f59e0b;color:#fbbf24}.notice.error{background:#2a1515;border:1px solid #f87171;color:#fecaca}
   .card,.callout{background:rgba(22,26,32,.94);border:1px solid #2a313d;border-radius:18px;padding:20px}.section{margin-top:18px}.meta{display:flex;flex-wrap:wrap;gap:8px}.meta span{padding:7px 10px;border-radius:999px;background:#1c222b;border:1px solid #2a313d;color:#9da7b3}.urgent{background:#fbbf24 !important;color:#111 !important;border-color:transparent !important;font-weight:700}
   h1{margin:14px 0}.sub,.muted,p{color:#9da7b3;line-height:1.6}.minihead{color:#f59e0b;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:700;margin-bottom:12px}.response+.response{margin-top:14px;padding-top:14px;border-top:1px solid #2a313d}.tight span{font-size:12px}
 </style>
