@@ -1,6 +1,6 @@
 # NEXT.md — ShopFloor
 
-_Last updated: 2026-06-09_
+_Last updated: 2026-06-10_
 
 ## What this project is
 
@@ -23,6 +23,7 @@ ShopFloor has a SvelteKit app under `app/`, Supabase schema under `supabase/sche
 Prototype routes exist and render:
 
 - `/`
+- `/about`
 - `/feed`
 - `/field-notes`
 - `/how-it-works`
@@ -45,6 +46,7 @@ Current app capabilities:
 - Shop detail and request detail load live Supabase records when available.
 - Sample fallback exists only for demo/no-Supabase mode and should be visibly labeled.
 - Markdown knowledge base MVP exists with wiki-style links and starter tool/guide/concept content.
+- Public About/mission page exists at `/about` and is linked from the app shell.
 
 ## What is not implemented yet
 
@@ -141,11 +143,10 @@ Use GitHub `main` as the morning truth.
 
 Next good work slices:
 
-1. Finish the code-review fixes: truth docs, privacy view setting, honest demo fallback.
-2. Preview/deploy the Knowledge Base MVP so Nate can edit against the real surface.
-3. Turn the ShopFloor relationships/public-statement draft into About/mission page copy.
-4. Add a simple field-note creation path or prepare the next bounded task card for it.
-5. Decide whether structured tools/resources wait until after the public alpha surface is visible.
+1. Review/edit the `/about` mission page copy for Nate voice, risk, and public promises.
+2. Preview/deploy the Knowledge Base MVP plus About page so Nate can edit against the real surface.
+3. Add a simple field-note creation path or prepare the next bounded task card for it.
+4. Decide whether structured tools/resources wait until after the public alpha surface is visible.
 
 ## If another agent picks this up
 

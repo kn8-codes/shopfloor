@@ -4,6 +4,7 @@
   let { children } = $props();
   const nav = [
     { href: '/', label: 'Home' },
+    { href: '/about', label: 'About' },
     { href: '/feed', label: 'Feed' },
     { href: '/field-notes', label: 'Field notes' },
     { href: '/knowledge', label: 'Knowledge' },

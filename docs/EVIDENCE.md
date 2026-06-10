@@ -13,6 +13,13 @@ Record receipts here. Agent narration is not evidence. Pretty words are how bugs
 - Checked by:
 ```
 
+## 2026-06-10 — About/mission page Sprint 2 slice verified
+
+- Command/source: created `/about` route, added app-shell nav link, changed home secondary CTA to `/about`; ran from `app/`: `npm run check && npm run build`; then ran `npm run preview -- --host 127.0.0.1 --port 4174` and `curl -sS -D - http://127.0.0.1:4174/about`.
+- Result: `svelte-check found 0 errors and 0 warnings`; `vite build` passed; `/about` returned HTTP 200 and contained `About ShopFloor`, `Aid is the visible action`, and `No gig-economy cosplay` copy.
+- File/path/link: `app/src/routes/about/+page.svelte`; `app/src/lib/components/AppShell.svelte`; `app/src/routes/+page.svelte`; `STATE.md`; `NEXT.md`
+- Checked by: Egon at 2026-06-10 18:20 EDT
+
 ## 2026-06-09 — Code review truth correction
 
 - Command/source: Fable 5/Claude code review of `main` at `2db884f`; Egon verified with `grep -RIn "request_responses\|time_ledger_entries"` across M1, Venkman, Janine, and Winston worktrees.

@@ -1,6 +1,6 @@
 # Current State — ShopFloor
 
-_Last updated: 2026-06-09_
+_Last updated: 2026-06-10_
 
 ## Active Goal
 
@@ -43,6 +43,8 @@ Current verified technical state before this review-fix branch:
 - Markdown knowledge base MVP exists and renders through `/knowledge` routes.
 - KB implementation guide exists at `docs/KNOWLEDGE_BASE_IMPLEMENTATION.md`.
 - Starter KB content exists for repair tools, triage guides, and safety/privacy concepts.
+- Public About/mission page exists at `/about` and is linked from the app shell navigation.
+- Home page secondary CTA now points to `/about` instead of duplicating the feed CTA.
 
 ## Explicitly Not Done Yet
 
@@ -54,7 +56,6 @@ These are open work, not current implementation:
 - Atomic completion-to-ledger RPC.
 - Field note creation route/form.
 - Structured tools/resources persistence.
-- Public About/mission page in the app.
 - User support/feedback intake.
 
 ## Known Gaps / Open Work
@@ -64,19 +65,18 @@ These are open work, not current implementation:
 3. Structured tools/resources are still not persisted as first-class schema objects.
 4. Field note creation flow is missing.
 5. Auth/testing path needs hardening before broader alpha.
-6. Public mission/about page is not implemented in the app yet.
-7. User support/feedback intake is missing.
-8. Knowledge base starter entries need Nate edit/review before being treated as authoritative.
-9. Server-side Supabase loader currently uses the shared anon client only for public reads; do not add authenticated server behavior there without a per-request server client.
+6. User support/feedback intake is missing.
+7. Knowledge base starter entries need Nate edit/review before being treated as authoritative.
+8. Server-side Supabase loader currently uses the shared anon client only for public reads; do not add authenticated server behavior there without a per-request server client.
 
 ## Next Best Action
 
 Recommended next slice:
 
-1. Finish and verify the code-review fixes: truth docs, privacy view setting, honest demo fallback.
-2. Preview or deploy the KB MVP so Nate can see and edit against the real surface.
-3. Add/update public ShopFloor About/mission page copy from the relationships draft.
-4. Create a bounded next implementation task for field-note creation or structured tools/resources, but do not start both at once.
+1. Nate reviews `/about` copy for voice, risk, and public promises.
+2. Preview or deploy the KB MVP plus About page so Nate can edit against the real surface.
+3. Create a bounded next implementation task for field-note creation or structured tools/resources, but do not start both at once.
+4. Add user support/feedback intake before broader alpha testing.
 
 ## Blockers
 
@@ -86,10 +86,10 @@ Recommended next slice:
 
 ## Open Questions for Nate
 
-- Should the next visible public page be the ShopFloor About/mission page or KB index polish?
-- Should field-note creation or structured tools/resources be the next app feature after KB?
+- Is `/about` safe to publish after edits, or should it stay alpha/internal until the first community tester pass?
+- Should field-note creation or structured tools/resources be the next app feature after KB/About?
 - Should KB starter entries be marked public-alpha/starter visibly until Nate reviews them?
 
 ## Last Verified
 
-2026-06-09
+2026-06-10 — `npm run check`, `npm run build`, and local `/about` preview smoke passed.
