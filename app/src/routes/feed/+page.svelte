@@ -21,7 +21,7 @@
   {#if data.demo}
     <section class="notice" aria-label="Sample feed notice">
       <strong>Sample alpha feed.</strong>
-      Supabase live data is not configured or could not be loaded here, so these cards are examples rather than live neighborhood requests.
+      Supabase live data is not configured or could not be loaded here, so these cards are examples rather than live neighborhood requests. Treat them as prototype fixtures for testing the workflow, not as active calls for help.
     </section>
   {:else}
     <section class="notice live" aria-label="Live feed notice">
