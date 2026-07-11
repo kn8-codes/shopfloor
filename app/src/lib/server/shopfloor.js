@@ -1,10 +1,73 @@
 import { supabase, supabaseEnabled } from '$lib/supabase';
-import { getProfileBundle, getRequestById } from '$lib/data/sample';
+import {
+  getLocalSupportOptionsForRequest,
+  getProfileBundle,
+  getRequestById,
+  getRequestsForFeed
+} from '$lib/data/sample';
 
 /** @param {string} message */
 function loadError(message) {
   return {
     error: message,
+    demo: false
+  };
+}
+
+function sampleFeedResult() {
+  return {
+    requests: getRequestsForFeed().map((request) => ({
+      ...request,
+      body: request.description,
+      demo: true
+    })),
+    demo: true
+  };
+}
+
+/** @param {string} id */
+function sampleRequestDetailResult(id) {
+  const request = getRequestById(id);
+  return request
+    ? {
+        request: { ...request, demo: true },
+        localSupportOptions: getLocalSupportOptionsForRequest(request),
+        demo: true
+      }
+    : { request: null, localSupportOptions: [], demo: true };
+}
+
+export async function loadFeedRequests() {
+  if (!supabaseEnabled || !supabase) {
+    return sampleFeedResult();
+  }
+
+  const { data: requests, error } = await supabase
+    .from('help_requests_with_author')
+    .select('*')
+    .eq('safe_to_share', true)
+    .in('status', ['open', 'in_progress', 'resolved'])
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    return {
+      ...sampleFeedResult(),
+      error: 'Could not load live requests, so this feed is showing sample alpha data.'
+    };
+  }
+
+  return {
+    requests: (requests ?? []).map((request) => ({
+      ...request,
+      body: request.description,
+      author: {
+        handle: request.author_handle,
+        display_name: request.author_display_name,
+        neighborhood: request.author_neighborhood
+      },
+      created_at_label: 'live record',
+      demo: false
+    })),
     demo: false
   };
 }
@@ -54,8 +117,7 @@ export async function loadShopCard(handle) {
 /** @param {string} id */
 export async function loadRequestDetail(id) {
   if (!supabaseEnabled || !supabase) {
-    const request = getRequestById(id);
-    return request ? { request: { ...request, demo: true }, demo: true } : { request: null, demo: true };
+    return sampleRequestDetailResult(id);
   }
 
   const { data: request, error } = await supabase
@@ -65,15 +127,22 @@ export async function loadRequestDetail(id) {
     .maybeSingle();
 
   if (error) {
-    return {
-      request: null,
-      demo: false,
-      error: 'Could not load this request from live data.'
-    };
+    const sample = sampleRequestDetailResult(id);
+    return sample.request
+      ? {
+          ...sample,
+          warning: 'Could not load this request from live data, so this page is showing sample alpha data.'
+        }
+      : {
+          request: null,
+          localSupportOptions: [],
+          demo: false,
+          error: 'Could not load this request from live data.'
+        };
   }
 
   if (!request) {
-    return { request: null, demo: false };
+    return { request: null, localSupportOptions: [], demo: false };
   }
 
   return {
@@ -88,6 +157,7 @@ export async function loadRequestDetail(id) {
       responses: [],
       demo: false
     },
+    localSupportOptions: getLocalSupportOptionsForRequest(request),
     demo: false
   };
 }

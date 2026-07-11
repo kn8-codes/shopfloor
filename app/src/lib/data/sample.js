@@ -185,6 +185,74 @@ export const field_notes = [
   }
 ];
 
+export const local_support_options = [
+  {
+    id: 'support-akron-food-not-panic',
+    name: 'Akron public food-assistance line',
+    resource_kind: 'food',
+    categories: ['kid_family', 'other'],
+    service_area: 'Akron / Summit County',
+    description: 'A plain first call when food is part of the emergency and the request still needs neighbor help around timing, rides, or paperwork.',
+    access_note: 'Call or check the public site first; hours and eligibility can change.',
+    source_name: 'Sample public-source placeholder',
+    source_url: 'https://www.akronohio.gov/',
+    source_checked_at_label: 'sample only — not live checked',
+    verification_status: 'sample_unverified_public_source'
+  },
+  {
+    id: 'support-summit-paperwork-help',
+    name: 'Summit County paperwork/navigation help',
+    resource_kind: 'paperwork',
+    categories: ['paperwork', 'housing', 'kid_family'],
+    service_area: 'Summit County',
+    description: 'A support option for forms, benefits, housing paperwork, or agency navigation when the neighbor ask is really “sit with me through this.”',
+    access_note: 'Use as a starting point, not an eligibility decision. Bring documents if an appointment is required.',
+    source_name: 'Sample public-source placeholder',
+    source_url: 'https://www.summitcountyohio.gov/',
+    source_checked_at_label: 'sample only — not live checked',
+    verification_status: 'sample_unverified_public_source'
+  },
+  {
+    id: 'support-transit-ride-backup',
+    name: 'Transit / ride-planning backup',
+    resource_kind: 'transportation',
+    categories: ['ride_help', 'paperwork', 'kid_family'],
+    service_area: 'Akron area',
+    description: 'A backup option for planning a route when the request still needs a person with a car, a tool, or time to help close the gap.',
+    access_note: 'Check current schedules and fares. Do not assume this replaces neighbor help.',
+    source_name: 'Sample public-source placeholder',
+    source_url: 'https://www.akronmetro.org/',
+    source_checked_at_label: 'sample only — not live checked',
+    verification_status: 'sample_unverified_public_source'
+  },
+  {
+    id: 'support-housing-repair-intake',
+    name: 'Housing repair / tenant support intake',
+    resource_kind: 'housing',
+    categories: ['housing'],
+    service_area: 'Akron / Summit County',
+    description: 'A support option when a repair problem may involve landlord, safety, code, or paperwork questions in addition to hands-on help.',
+    access_note: 'Call first. This panel cannot decide rights, eligibility, or urgency.',
+    source_name: 'Sample public-source placeholder',
+    source_url: 'https://www.akronohio.gov/',
+    source_checked_at_label: 'sample only — not live checked',
+    verification_status: 'sample_unverified_public_source'
+  },
+  {
+    id: 'support-tool-library-pattern',
+    name: 'Tool-lending / repair bench idea',
+    resource_kind: 'tool_access',
+    categories: ['tool_borrow', 'car', 'appliance', 'yard_outdoor'],
+    service_area: 'Neighborhood-dependent',
+    description: 'A placeholder for a real local tool-access option if one is checked later. For now, neighbor-owned tools remain the primary ShopFloor path.',
+    access_note: 'Sample only. Do not treat this as a known available tool library.',
+    source_name: 'ShopFloor sample fixture',
+    source_url: '/knowledge',
+    source_checked_at_label: 'sample only — not live checked',
+    verification_status: 'sample_unverified_public_source'
+  }
+];
+
 /** @param {string} handle */
 export function getProfileByHandle(handle) {
   return profiles.find((profile) => profile.handle === handle);
@@ -214,6 +282,15 @@ export function getRequestById(id) {
       author: getProfileById(response.author_id)
     }))
   };
+}
+
+/** @param {{ category?: string } | null | undefined} request */
+export function getLocalSupportOptionsForRequest(request, limit = 5) {
+  const category = request?.category;
+  if (!category) return [];
+  return local_support_options
+    .filter((option) => option.categories.includes(category))
+    .slice(0, limit);
 }
 
 /** @param {string} handle */

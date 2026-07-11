@@ -146,7 +146,7 @@ Next good work slices:
 1. Review/edit the `/about` mission page copy for Nate voice, risk, and public promises.
 2. Preview/deploy the Knowledge Base MVP plus About page so Nate can edit against the real surface.
 3. Add a simple field-note creation path or prepare the next bounded task card for it.
-4. Decide whether structured tools/resources wait until after the public alpha surface is visible.
+4. Decide whether structured local-resource support data should graduate from sample fixtures into a real reviewed data model after the request-detail sample slice is tested.
 
 ## If another agent picks this up
 

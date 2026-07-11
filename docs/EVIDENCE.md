@@ -13,6 +13,13 @@ Record receipts here. Agent narration is not evidence. Pretty words are how bugs
 - Checked by:
 ```
 
+## 2026-06-18 — Homepage alpha labels and live feed loader slice verified
+
+- Command/source: reviewed and tightened `app/src/routes/+page.svelte`; added `loadFeedRequests()` in `app/src/lib/server/shopfloor.js`; added `app/src/routes/feed/+page.server.js`; updated `app/src/routes/feed/+page.svelte`; ran from `app/`: `npm run check && npm run build`; ran preview on `127.0.0.1:4175` and curled `/`, `/feed`, and `/request/request-battery-clamp`.
+- Result: homepage sample cards now explicitly read `Sample open request`, `Sample shop card`, and `Sample field note`; `/feed` loads live safe-to-share requests from `help_requests_with_author` when Supabase is configured and otherwise shows a visible `Sample alpha feed` fallback notice. `svelte-check found 0 errors and 0 warnings`; `vite build` passed; preview route smoke returned HTTP 200 for `/`, `/feed`, and `/request/request-battery-clamp`; `/feed` HTML contained `Sample alpha feed`, `Nearby problems first`, sample request title, and `@northhillpartsrun` in no-Supabase mode.
+- File/path/link: `app/src/routes/+page.svelte`; `app/src/lib/server/shopfloor.js`; `app/src/routes/feed/+page.server.js`; `app/src/routes/feed/+page.svelte`; Kanban `t_a13d9957`
+- Checked by: Egon at 2026-06-18 11:21 EDT
+
 ## 2026-06-10 — About/mission page Sprint 2 slice verified
 
 - Command/source: created `/about` route, added app-shell nav link, changed home secondary CTA to `/about`; ran from `app/`: `npm run check && npm run build`; then ran `npm run preview -- --host 127.0.0.1 --port 4174` and `curl -sS -D - http://127.0.0.1:4174/about`.
@@ -124,3 +131,11 @@ Record receipts here. Agent narration is not evidence. Pretty words are how bugs
 - Result: remote `main` at `8a6d550 fix: run shopfloor route loads on server`; Venkman at `/Users/kn8/projects/shopfloor`, Janine at `/home/kn8/projects/shopfloor`, and Winston at `/Users/kn8.claw/projects/shopfloor` all reported `main...origin/main` at `8a6d550`.
 - File/path/link: `https://github.com/kn8-codes/shopfloor`; `/mesh/30_RECEIPTS/egon/2026-06-09__receipt__shopfloor-kb-mvp-main-and-fleet-pull.md`
 - Checked by: Egon at 2026-06-09
+
+## 2026-06-29 — Request-detail Local support options sample slice
+
+- Command/source: Nate approved code changes in Telegram; implemented a sample-data-only `Local support options` panel on `/request/[id]` using category-matched fixture data from `app/src/lib/data/sample.js` and loader output from `app/src/lib/server/shopfloor.js`.
+- Result: `npm run check` passed with 0 errors / 0 warnings after one type-narrowing fix. `npm run build` passed. Preview with Supabase disabled returned rendered HTML for `/request/request-battery-clamp` containing `Local support options`, `Support data, not a replacement for neighbor help`, `sample only — not live checked`, and `not verified endorsements`. Browser snapshot confirmed the panel appears between the request body and responses.
+- Boundary: no live Akron resource import, no scraping, no standalone `/resources` route, no database/schema migration, no endorsement/eligibility claims.
+- File/path/link: `app/src/lib/data/sample.js`; `app/src/lib/server/shopfloor.js`; `app/src/routes/request/[id]/+page.svelte`; receipt `/mesh/MESH_BOARD/30_RECEIPTS/egon/2026-06-29__shopfloor-local-support-options-code-slice.md`
+- Checked by: Egon at 2026-06-29

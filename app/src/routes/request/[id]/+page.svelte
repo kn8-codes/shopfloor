@@ -1,5 +1,6 @@
 <script>
   let { data } = $props();
+  const localSupportOptions = $derived(data.localSupportOptions ?? []);
 </script>
 
 <svelte:head><title>ShopFloor — {data.request?.title ?? 'Request'}</title></svelte:head>
@@ -12,6 +13,9 @@
     {#if data.demo || data.request.demo}
       <div class="notice demo">Sample data — this is not a real request.</div>
     {/if}
+    {#if data.warning}
+      <div class="notice warning">{data.warning}</div>
+    {/if}
     <div class="card">
       <div class="meta">
         <span>{data.request.category}</span>
@@ -23,6 +27,35 @@
       <p>{data.request.description}</p>
       <p class="muted">Budget / barter note: {data.request.budget_note}</p>
     </div>
+
+    {#if localSupportOptions.length}
+      <section class="section card support-panel" aria-labelledby="local-support-heading">
+        <div class="minihead">Local support options</div>
+        <h2 id="local-support-heading">Support data, not a replacement for neighbor help.</h2>
+        <p class="support-note">
+          These are sample public-source support options matched by request category. They are not verified endorsements,
+          eligibility decisions, or a complete directory. Neighbor help can still continue here.
+        </p>
+
+        <div class="support-list">
+          {#each localSupportOptions as option (option.id)}
+            <article class="support-option">
+              <div class="meta tight">
+                <span>{option.resource_kind}</span>
+                <span>{option.service_area}</span>
+                <span>{option.source_checked_at_label}</span>
+              </div>
+              <h3>{option.name}</h3>
+              <p>{option.description}</p>
+              <p class="muted"><strong>Check first:</strong> {option.access_note}</p>
+              <p class="source-line">
+                Source: <a href={option.source_url}>{option.source_name}</a> · {option.verification_status}
+              </p>
+            </article>
+          {/each}
+        </div>
+      </section>
+    {/if}
 
     <div class="section card">
       <div class="minihead">Responses</div>
@@ -51,7 +84,8 @@
 {/if}
 
 <style>
-  .page{max-width:900px;margin:0 auto;padding:24px}.back{color:#9da7b3;text-decoration:none;display:inline-block;margin-bottom:16px}.notice{border-radius:14px;padding:12px 14px;margin-bottom:14px;font-weight:700}.notice.demo{background:#1c222b;border:1px solid #f59e0b;color:#fbbf24}.notice.error{background:#2a1515;border:1px solid #f87171;color:#fecaca}
+  .page{max-width:900px;margin:0 auto;padding:24px}.back{color:#9da7b3;text-decoration:none;display:inline-block;margin-bottom:16px}.notice{border-radius:14px;padding:12px 14px;margin-bottom:14px;font-weight:700}.notice.demo{background:#1c222b;border:1px solid #f59e0b;color:#fbbf24}.notice.warning{background:#1c222b;border:1px solid rgba(245,158,11,.55);color:#fbbf24}.notice.error{background:#2a1515;border:1px solid #f87171;color:#fecaca}
   .card,.callout{background:rgba(22,26,32,.94);border:1px solid #2a313d;border-radius:18px;padding:20px}.section{margin-top:18px}.meta{display:flex;flex-wrap:wrap;gap:8px}.meta span{padding:7px 10px;border-radius:999px;background:#1c222b;border:1px solid #2a313d;color:#9da7b3}.urgent{background:#fbbf24 !important;color:#111 !important;border-color:transparent !important;font-weight:700}
   h1{margin:14px 0}.sub,.muted,p{color:#9da7b3;line-height:1.6}.minihead{color:#f59e0b;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:700;margin-bottom:12px}.response+.response{margin-top:14px;padding-top:14px;border-top:1px solid #2a313d}.tight span{font-size:12px}
+  .support-panel{border-left:3px solid #38bdf8}.support-panel h2{margin:4px 0 8px;color:#ece7dc}.support-note{max-width:72ch}.support-list{display:grid;gap:14px;margin-top:18px}.support-option{border:1px solid #2a313d;border-radius:14px;background:#151a21;padding:16px}.support-option h3{margin:12px 0 6px;color:#ece7dc}.source-line{font-size:13px}.source-line a{color:#f59e0b;text-decoration:none;font-weight:800}
 </style>

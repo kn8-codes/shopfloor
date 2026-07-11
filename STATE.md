@@ -58,6 +58,12 @@ These are open work, not current implementation:
 - Structured tools/resources persistence.
 - User support/feedback intake.
 
+## Current Implemented Slice — 2026-06-29
+
+- Request detail now renders a bounded `Local support options` panel when sample/category-matched support options exist.
+- The slice is sample-data-only: no live Akron resource import, no scraping, no standalone `/resources` route, and no endorsement/eligibility claims.
+- The panel is intentionally subordinate to the request/response loop and appears before responses as context, not as a directory center of gravity.
+
 ## Known Gaps / Open Work
 
 1. Live Supabase/database privacy verification remains incomplete.

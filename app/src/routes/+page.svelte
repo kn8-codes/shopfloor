@@ -2,23 +2,53 @@
   let { data } = $props();
   const categories = ['Car', 'Housing', 'Tool borrow', 'Ride help', 'Paperwork', 'Appliance rescue'];
   const request = {
+    eyebrow: 'Sample open request',
     title: 'Need help replacing a dead battery clamp before tomorrow’s school run',
     category: 'Car',
     neighborhood: 'Kenmore',
     urgency: 'Urgent',
-    body: 'A real problem, a local ask, and a clear path to somebody useful answering it.'
+    body: 'A prototype example of a local ask and the kind of clear path we want to support.'
   };
   const helper = {
+    eyebrow: 'Sample shop card',
     handle: '@jlibertytools',
     neighborhood: 'West Akron',
     skills: ['Battery / alternator', 'Brake jobs', 'Appliance rescue'],
     tools: ['Jack + stands', 'Code scanner', 'Jump pack']
   };
   const fieldNote = {
+    eyebrow: 'Sample field note',
     title: 'Fridge wasn’t dying, the outlet GFCI was half-tripped',
-    body: 'Checked voltage first, reset the upstream GFCI, cleaned the plug, fridge came back. Ten minutes. Zero-dollar fix.',
+    body: 'Example note: checked voltage first, reset the upstream GFCI, cleaned the plug, fridge came back. Ten minutes. Zero-dollar fix.',
     neighborhood: 'North Hill'
   };
+
+  const publicAlphaResources = [
+    {
+      title: 'Understand the alpha boundaries',
+      body: 'What ShopFloor is trying to be, what it is not, and why public-alpha means starter surface rather than finished network.',
+      href: '/about',
+      label: 'Read the mission'
+    },
+    {
+      title: 'Use the starter knowledge base',
+      body: 'Browse early repair guides, tool notes, safety concepts, and practical memory that still needs human review before being treated as authoritative.',
+      href: '/knowledge',
+      label: 'Open knowledge base'
+    },
+    {
+      title: 'See the current product shape',
+      body: 'Walk through the intended flow: shop cards, real requests, field notes, and the parts that are still prototype scaffolding.',
+      href: '/how-it-works',
+      label: 'How it works'
+    },
+    {
+      title: 'Explore sample public surfaces',
+      body: 'Look at the current feed and field notes as alpha examples. They are orientation surfaces, not proof of a launched marketplace.',
+      href: '/feed',
+      label: 'Open feed'
+    }
+  ];
 </script>
 
 <svelte:head>
@@ -57,9 +87,32 @@
     </div>
   </section>
 
+  <section class="card alpha-panel" aria-labelledby="alpha-resources-heading">
+    <div class="alpha-intro">
+      <div>
+        <div class="eyebrow">Public-alpha orientation</div>
+        <h2 id="alpha-resources-heading">Start with the useful surfaces that already exist.</h2>
+      </div>
+      <p>
+        This is a starter alpha for orientation and testing, not a launched mutual-aid marketplace. These links point only
+        to routes already present in the app so testers can see the current shape without assuming unfinished backend
+        behavior, safety guarantees, partner coverage, or live community response.
+      </p>
+    </div>
+    <div class="resource-grid">
+      {#each publicAlphaResources as resource (resource.href)}
+        <article class="resource-card">
+          <h3>{resource.title}</h3>
+          <p>{resource.body}</p>
+          <a href={resource.href}>{resource.label} →</a>
+        </article>
+      {/each}
+    </div>
+  </section>
+
   <section class="three-up">
     <article class="card">
-      <div class="minihead">Open request</div>
+      <div class="minihead">{request.eyebrow}</div>
       <h2>{request.title}</h2>
       <div class="meta">
         <span>{request.category}</span>
@@ -70,7 +123,7 @@
     </article>
 
     <article class="card">
-      <div class="minihead">Shop card</div>
+      <div class="minihead">{helper.eyebrow}</div>
       <h2>{helper.handle}</h2>
       <p class="muted">{helper.neighborhood}</p>
       <h3>Skills</h3>
@@ -80,7 +133,7 @@
     </article>
 
     <article class="card note">
-      <div class="minihead">Field note</div>
+      <div class="minihead">{fieldNote.eyebrow}</div>
       <h2>{fieldNote.title}</h2>
       <p>{fieldNote.body}</p>
       <p class="muted">{fieldNote.neighborhood}</p>
@@ -128,6 +181,19 @@
   .primary { background: #f59e0b; color: #111; }
   .secondary { border: 1px solid #2a313d; color: #ece7dc; }
   .three-up { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .alpha-panel { margin-bottom: 24px; }
+  .alpha-intro { display: grid; grid-template-columns: .9fr 1.1fr; gap: 20px; align-items: start; margin-bottom: 18px; }
+  .alpha-intro h2 { margin-top: 10px; max-width: 18ch; }
+  .resource-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .resource-card {
+    border: 1px solid #2a313d;
+    border-radius: 14px;
+    padding: 16px;
+    background: #151a21;
+  }
+  .resource-card h3 { color: #ece7dc; margin-top: 0; text-transform: none; letter-spacing: 0; font-size: 18px; }
+  .resource-card p { margin-bottom: 18px; }
+  .resource-card a { color: #f59e0b; text-decoration: none; font-weight: 800; }
   .note { border-left: 3px solid #34d399; }
   .network { position: relative; min-height: 320px; overflow: hidden; }
   .inset { padding: 0; }
@@ -152,7 +218,7 @@
   .n3 { left: 34%; top: 58%; } .l3 { left: 37%; top: 54%; }
   .n4 { left: 52%; top: 78%; } .l4 { left: 55%; top: 74%; }
   @media (max-width: 960px) {
-    .hero, .three-up { grid-template-columns: 1fr; }
+    .hero, .three-up, .alpha-intro, .resource-grid { grid-template-columns: 1fr; }
     h1 { font-size: 36px; }
   }
 </style>
