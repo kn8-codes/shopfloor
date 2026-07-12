@@ -14,9 +14,9 @@ Current mission frame: **Aid is the visible action. Relationship is the infrastr
 
 Repo: `https://github.com/kn8-codes/shopfloor`  
 Canonical branch: `main`  
-Current verified HEAD: `11a6371 Document ShopFloor home deployment procedure`
+Current verified HEAD: `f1bea0e Add ShopFloor field note creation v0`
 
-ShopFloor has a SvelteKit app under `app/`, Supabase schema under `supabase/schema.sql`, product docs under `docs/`, a file-backed Markdown knowledge base under `app/src/lib/content/kb/`, an explicit public release gate, and AgentsRoom team scaffolding under `AGENTSROOM_TEAM/`.
+ShopFloor has a SvelteKit app under `app/`, Supabase schema under `supabase/schema.sql`, product docs under `docs/`, a file-backed Markdown knowledge base under `app/src/lib/content/kb/`, an explicit public release gate, tester support intake, field-note creation v0, and AgentsRoom team scaffolding under `AGENTSROOM_TEAM/`.
 
 ## Current verified app shape
 
@@ -26,6 +26,7 @@ Prototype routes exist and render/build:
 - `/about`
 - `/feed`
 - `/field-notes`
+- `/field-notes/new`
 - `/how-it-works`
 - `/new-request`
 - `/login`
@@ -51,7 +52,8 @@ Current app capabilities:
 - Markdown knowledge base MVP exists with wiki-style links and starter tool/guide/concept content.
 - Support/feedback intake route exists at `/support` as a no-send, copyable tester note for controlled alpha walkthroughs.
 - Public About/mission page exists at `/about` and is linked from app shell.
-- Field-notes archive route exists and shows sample field notes.
+- Field-notes archive route exists and can load live notes or sample fallback.
+- Field-note creation v0 exists at `/field-notes/new`, with validation, preview, and gated save behavior.
 
 ## What is not implemented yet
 
@@ -61,8 +63,8 @@ The following are **open work**, not current code:
 - Request completion flow.
 - Time ledger/history UI.
 - Atomic completion-to-ledger RPC.
-- Field-note creation route/form.
 - Structured tools/resources persistence as a reviewed live product surface.
+- Persistent/routed support-ticket intake.
 - Live Supabase/privacy verification for public alpha.
 - Public copy approval and release-gate opening.
 
@@ -139,11 +141,11 @@ Caveat: starter KB entries still need Nate review before being treated as author
 2. **Live database privacy verification**
    - Local schema defines `help_requests_with_author` with `security_invoker = true`.
    - Live Supabase must still be migrated/verified with anon-key checks.
+   - Field notes are public-readable in the current schema and need privacy review before external tester data.
 
-3. **Field note creation flow missing**
-   - Field notes are modeled and sampled.
-   - Field-note archive route exists.
-   - Creation route/form is still missing.
+3. **Request response / completion missing**
+   - Help request creation exists.
+   - Response, completion, and time-history loops are not current code.
 
 4. **Tester support intake is first-pass only**
    - `/support` exists as a no-send, copyable feedback packet for controlled alpha walkthroughs.
@@ -158,13 +160,13 @@ Caveat: starter KB entries still need Nate review before being treated as author
 
 ## Highest-priority next move
 
-Use GitHub `main` as the truth source, then do one of these bounded slices:
+Use GitHub `main` as the truth source, then do one bounded proof slice:
 
-1. **Field-note creation v0 card / implementation** — recommended next code slice.
-2. **Live Supabase/privacy verification** — required before real private preview with external tester data.
+1. **Live Supabase/privacy verification** — recommended next gate before real tester data.
+2. **Private internal walkthrough** — request -> support path -> field note draft with sample or consented data.
 3. **Support/feedback intake persistence design** — only after copyable `/support` is tested.
-4. **Public-copy audit only** — no edits until Nate approves exact copy changes.
-5. **README status correction** — small public repo docs fix; needs approval if treated as public copy.
+4. **Request response/completion v0** — next product loop after field-note and privacy proof.
+5. **Manager/foundry docs refresh** — useful continuity cleanup, but do not let it outrank product proof.
 
 ## If another agent picks this up
 

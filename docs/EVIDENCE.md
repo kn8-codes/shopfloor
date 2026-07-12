@@ -13,6 +13,14 @@ Record receipts here. Agent narration is not evidence. Pretty words are how bugs
 - Checked by:
 ```
 
+## 2026-07-12 — Field-note creation v0 committed and pushed
+
+- Command/source: continued from the reviewed field-note autostart diff after Nate approved pragmatic continuation; added `/field-notes` server loader, live-capable field-note loading, `/field-notes/new` creation route, client-side validation, preview, and safer copy away from ratings/content-dashboard behavior.
+- Result: field-note creation v0 is on `main` as `f1bea0e Add ShopFloor field note creation v0`. It does not deploy, publish, contact anyone, or open the public release gate.
+- Verification: from `app/`, `npm run check` passed with 0 errors / 0 warnings; `npm run build` passed with expected adapter-auto warning only. Local preview route smoke returned HTTP 200 for `/field-notes` and `/field-notes/new` and found required markers including `Write a field note`, `not ratings`, `Capture what worked`, `Safety / honesty label`, and `Public release stays gated`. Staged secret scan found no obvious secrets. Remote `main` matched local HEAD `f1bea0e29ddf2fe944bb6736f47d2646b9afedb9` after push.
+- File/path/link: `app/src/lib/api.js`; `app/src/lib/server/shopfloor.js`; `app/src/routes/field-notes/+page.server.js`; `app/src/routes/field-notes/+page.svelte`; `app/src/routes/field-notes/new/+page.server.js`; `app/src/routes/field-notes/new/+page.svelte`; Kanban `t_91934da6`; receipt `/mesh/30_RECEIPTS/egon/2026-07-12__shopfloor-field-note-v0-commit-push.md`
+- Checked by: Egon at 2026-07-12 17:54 EDT
+
 ## 2026-07-12 — Tester support intake route and script verified
 
 - Command/source: inspected current dirty tree and activation packet; selected support/feedback intake before field-note creation for the first tester-loop proof; added `/support` route and app-shell nav link; added tester walkthrough script at `docs/plans/2026-07-12-shopfloor-tester-loop-script.md`; updated `STATE.md` and `NEXT.md`.
