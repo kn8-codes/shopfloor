@@ -104,13 +104,17 @@
   </div>
 
   {#if !supabaseEnabled}
-    <div class="card notice warn">Supabase is not configured yet, so this page is still in prototype mode.</div>
+    <div class="card notice warn">
+      Supabase is not configured yet, so this page is still in prototype mode. Use this form to test the request flow and language, not to post a live call for help.
+    </div>
   {:else if !$authState.user}
-    <div class="card notice">Sign in first, then come back here to post a request.</div>
+    <div class="card notice">Sign in first, then come back here to post a request tied to your local shop context.</div>
   {:else if shopCardStatus === 'loading'}
-    <div class="card notice">Checking your shop card…</div>
+    <div class="card notice">Checking your shop card so requests stay tied to a real local context…</div>
   {:else if !hasShopCard}
-    <div class="card notice warn">You need a shop card before posting a request. That setup flow is the next thing to wire.</div>
+    <div class="card notice warn">
+      Create your shop card before posting a request. ShopFloor is trust-first: requests should carry enough local context that nearby help can be safe and practical.
+    </div>
   {/if}
 
   <form class="card form" onsubmit={handleSubmit}>
