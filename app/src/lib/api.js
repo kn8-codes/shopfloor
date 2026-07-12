@@ -68,6 +68,78 @@ export async function createHelpRequest(payload) {
   return data;
 }
 
+/** @param {string} value */
+function normalizeRequiredText(value) {
+  return value.trim().replace(/\s+/g, ' ');
+}
+
+/** @param {string} field @param {string} value @param {number} min @param {number} max */
+function requireLength(field, value, min, max) {
+  const normalized = normalizeRequiredText(value);
+  if (normalized.length < min || normalized.length > max) {
+    throw new Error(`${field} must be ${min}–${max} characters.`);
+  }
+  return normalized;
+}
+
+const fieldNoteSafetyLevels = new Set(['safe', 'temporary', 'janky']);
+
+/** @param {{
+ * request_id: string | null,
+ * title: string,
+ * problem: string,
+ * fix: string,
+ * cost: string,
+ * tools_used: string,
+ * time_required: string,
+ * safety_level: string,
+ * neighborhood_tip: string
+ * }} payload */
+export async function createFieldNote(payload) {
+  if (!supabaseEnabled || !supabase) {
+    throw new Error('Supabase is not configured yet.');
+  }
+
+  const user = await getCurrentUser();
+  if (!user) {
+    throw new Error('You need to sign in first.');
+  }
+
+  const shopCard = await getMyShopCard();
+  if (!shopCard) {
+    throw new Error('Create your shop card before writing a field note.');
+  }
+
+  if (!fieldNoteSafetyLevels.has(payload.safety_level)) {
+    throw new Error('Choose a valid safety / honesty label.');
+  }
+
+  const title = requireLength('Title', payload.title, 5, 140);
+  const problem = requireLength('Problem', payload.problem, 10, 3000);
+  const fix = requireLength('What worked', payload.fix, 10, 5000);
+
+  const { data, error } = await supabase
+    .from('field_notes')
+    .insert({
+      author_id: user.id,
+      request_id: payload.request_id || null,
+      title,
+      problem,
+      fix,
+      cost: payload.cost.trim() || null,
+      tools_used: payload.tools_used.trim() || null,
+      time_required: payload.time_required.trim() || null,
+      safety_level: payload.safety_level,
+      neighborhood_tip: payload.neighborhood_tip.trim() || null
+    })
+    .select('id')
+    .single();
+
+  if (error) throw error;
+
+  return data;
+}
+
 
 /** @param {string} rawTools */
 function parseTools(rawTools) {

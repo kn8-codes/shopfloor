@@ -1,7 +1,9 @@
 import { supabase, supabaseEnabled } from '$lib/supabase';
 import {
+  field_notes,
   getLocalSupportOptionsForRequest,
   getProfileBundle,
+  getProfileById,
   getRequestById,
   getRequestsForFeed
 } from '$lib/data/sample';
@@ -35,6 +37,31 @@ function sampleRequestDetailResult(id) {
         demo: true
       }
     : { request: null, localSupportOptions: [], demo: true };
+}
+
+function sampleFieldNoteCreationResult() {
+  return {
+    requestOptions: getRequestsForFeed()
+      .filter((request) => ['in_progress', 'resolved'].includes(request.status))
+      .map((request) => ({
+        id: request.id,
+        title: request.title,
+        status: request.status,
+        neighborhood: request.neighborhood,
+        author_handle: getProfileById(request.author_id)?.handle ?? 'unknown',
+        demo: true
+      })),
+    demo: true
+  };
+}
+
+function sampleFieldNotesResult() {
+  return {
+    notes: field_notes
+      .map((note) => ({ ...note, author: getProfileById(note.author_id), demo: true }))
+      .filter((note) => note.author),
+    demo: true
+  };
 }
 
 export async function loadFeedRequests() {
@@ -158,6 +185,74 @@ export async function loadRequestDetail(id) {
       demo: false
     },
     localSupportOptions: getLocalSupportOptionsForRequest(request),
+    demo: false
+  };
+}
+
+export async function loadFieldNotes() {
+  if (!supabaseEnabled || !supabase) {
+    return sampleFieldNotesResult();
+  }
+
+  const { data: notes, error } = await supabase
+    .from('field_notes')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(50);
+
+  if (error) {
+    return {
+      ...sampleFieldNotesResult(),
+      warning: 'Could not load live field notes, so this page is showing sample alpha data.'
+    };
+  }
+
+  const authorIds = [...new Set((notes ?? []).map((note) => note.author_id).filter(Boolean))];
+  let authorsById = new Map();
+
+  if (authorIds.length > 0) {
+    const { data: authors, error: authorsError } = await supabase
+      .from('shop_cards')
+      .select('id, handle, display_name, neighborhood')
+      .in('id', authorIds);
+
+    if (!authorsError) {
+      authorsById = new Map((authors ?? []).map((author) => [author.id, author]));
+    }
+  }
+
+  return {
+    notes: (notes ?? []).map((note) => ({
+      ...note,
+      author: authorsById.get(note.author_id) ?? null,
+      demo: false
+    })),
+    demo: false
+  };
+}
+
+export async function loadFieldNoteCreationContext() {
+  if (!supabaseEnabled || !supabase) {
+    return sampleFieldNoteCreationResult();
+  }
+
+  const { data: requests, error } = await supabase
+    .from('help_requests_with_author')
+    .select('id, title, status, neighborhood, author_handle')
+    .eq('safe_to_share', true)
+    .in('status', ['in_progress', 'resolved'])
+    .order('updated_at', { ascending: false })
+    .limit(20);
+
+  if (error) {
+    return {
+      ...sampleFieldNoteCreationResult(),
+      warning: 'Could not load live helped/resolved requests, so this form is showing sample request options.'
+    };
+  }
+
+  return {
+    requestOptions: requests ?? [],
     demo: false
   };
 }
