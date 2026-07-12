@@ -13,6 +13,14 @@ Record receipts here. Agent narration is not evidence. Pretty words are how bugs
 - Checked by:
 ```
 
+## 2026-07-12 — Tester support intake route and script verified
+
+- Command/source: inspected current dirty tree and activation packet; selected support/feedback intake before field-note creation for the first tester-loop proof; added `/support` route and app-shell nav link; added tester walkthrough script at `docs/plans/2026-07-12-shopfloor-tester-loop-script.md`; updated `STATE.md` and `NEXT.md`.
+- Result: `/support` provides a no-send, copyable tester feedback packet for controlled alpha walkthroughs. It does not deploy, publish, contact anyone, persist support tickets, or open the public release gate.
+- Verification: from `app/`, `npm run check` passed with 0 errors / 0 warnings; `npm run build` passed with expected adapter-auto warning only. Preview with `PUBLIC_SHOPFLOOR_PUBLIC_RELEASE=true` returned HTTP 200 for `/support` and contained `Tester support`, `Do not leave testers stranded`, `Copyable note`, and `Nothing is sent automatically`. Preview with `PUBLIC_SHOPFLOOR_PUBLIC_RELEASE=false` returned HTTP 200 for `/support` but showed the launch gate (`Not open for requests yet.`) and did not render `Tester support`.
+- File/path/link: `app/src/routes/support/+page.svelte`; `app/src/lib/components/AppShell.svelte`; `docs/plans/2026-07-12-shopfloor-tester-loop-script.md`; `STATE.md`; `NEXT.md`; Kanban `t_759f043d`
+- Checked by: Egon at 2026-07-12 15:55 EDT
+
 ## 2026-06-18 — Homepage alpha labels and live feed loader slice verified
 
 - Command/source: reviewed and tightened `app/src/routes/+page.svelte`; added `loadFeedRequests()` in `app/src/lib/server/shopfloor.js`; added `app/src/routes/feed/+page.server.js`; updated `app/src/routes/feed/+page.svelte`; ran from `app/`: `npm run check && npm run build`; ran preview on `127.0.0.1:4175` and curled `/`, `/feed`, and `/request/request-battery-clamp`.
@@ -131,6 +139,14 @@ Record receipts here. Agent narration is not evidence. Pretty words are how bugs
 - Result: remote `main` at `8a6d550 fix: run shopfloor route loads on server`; Venkman at `/Users/kn8/projects/shopfloor`, Janine at `/home/kn8/projects/shopfloor`, and Winston at `/Users/kn8.claw/projects/shopfloor` all reported `main...origin/main` at `8a6d550`.
 - File/path/link: `https://github.com/kn8-codes/shopfloor`; `/mesh/30_RECEIPTS/egon/2026-06-09__receipt__shopfloor-kb-mvp-main-and-fleet-pull.md`
 - Checked by: Egon at 2026-06-09
+
+## 2026-07-12 — Agent-team state reconciliation sprint
+
+- Command/source: bounded ShopFloor Agent Team sprint requested by Nate; Egon preflighted repo state, read stale `STATE.md`/`NEXT.md`, read July board receipts, ran read-only Fable review, verified current code with filtered grep and file reads, updated project state docs, and created a next field-note creation task card.
+- Result: Fable recommended docs/state reconciliation before further implementation. Current code reads confirmed: field-note archive exists but no creation route/form; sample-only `Local support options` exists but no real support/feedback intake; request responses/time-ledger remain historical or planned drift, not current app code. `STATE.md` and `NEXT.md` now reflect HEAD `11a6371` and the public release/privacy/copy gates. README drift was flagged but not edited because it is public-facing repo copy and needs separate approval if treated as public copy.
+- Verification: from `app/`, `npm run check` passed with 0 errors / 0 warnings and `npm run build` passed; expected adapter-auto warning only.
+- File/path/link: `STATE.md`; `NEXT.md`; Fable review `/Users/kn8/MESH_BOARD/projects/shopfloor/reviews/2026-07-12__fable-alpha-slice-review.md`; field-note card `/Users/kn8/MESH_BOARD/projects/shopfloor/work-orders/2026-07-12__field-note-creation-v0-card.md`; sprint work order `/Users/kn8/MESH_BOARD/projects/shopfloor/work-orders/2026-07-12__shopfloor-agent-team-sprint-state-and-field-notes.md`
+- Checked by: Egon at 2026-07-12 14:08 EDT
 
 ## 2026-06-29 — Request-detail Local support options sample slice
 

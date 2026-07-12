@@ -1,101 +1,119 @@
 # Current State — ShopFloor
 
-_Last updated: 2026-06-10_
+_Last updated: 2026-07-12_
 
 ## Active Goal
 
-Push ShopFloor Sprint 1 to a visible, useful alpha state.
+Advance ShopFloor toward a visible, useful public-alpha mutual-aid loop while preserving the release/privacy gates.
 
 Current focus:
 
-1. Keep GitHub `main` as the clean morning recovery source for all agents.
-2. Make the Markdown knowledge base visible and editable.
-3. Close the small truth/privacy/demo risks found in the 2026-06-09 code review.
-4. Turn ShopFloor philosophy into public/about-page copy.
-5. Continue practical alpha work without letting infrastructure spikes eat the day.
+1. Keep GitHub `main` as the clean recovery source for all agents.
+2. Keep state docs truthful enough that agents do not plan from historical drift.
+3. Preserve the public release gate until Nate approves public copy, live privacy checks, and local-trust readiness.
+4. Prepare one bounded mission-facing slice at a time: field-note creation, support/feedback intake, or public-copy audit.
+5. Avoid infrastructure theater when the next user-facing loop is still unfinished.
 
 ## Right Now
 
-ShopFloor is a SvelteKit app with Supabase-backed prototype flows and a Markdown knowledge base MVP.
+ShopFloor is a SvelteKit app under `app/` with Supabase-backed prototype wiring, a file-backed Markdown knowledge base MVP, public-alpha orientation surfaces, and an explicit launch gate.
 
-Current verified technical state before this review-fix branch:
+Current verified technical state for this reconciliation:
 
 - Repo: `https://github.com/kn8-codes/shopfloor`
 - Canonical branch: `main`
-- Latest pushed HEAD: `2db884f docs: update shopfloor sprint state`
-- KB MVP commit: `b8ab43c feat: add markdown knowledge base MVP`
-- Build-fix commit: `8a6d550 fix: run shopfloor route loads on server`
-- Docs/state commit: `2db884f docs: update shopfloor sprint state`
-- `npm ci`, `npm run check`, and `npm run build` passed on M1 before the KB MVP push on 2026-06-09.
-- `svelte-check` passed with 0 errors and 0 warnings before the docs/state commit.
-- Venkman, Janine, and Winston have pulled or cloned GitHub `main` at `2db884f`.
+- Current HEAD: `11a6371 Document ShopFloor home deployment procedure`
+- Tracking state: `main...origin/main`
+- App root: `app/`
+- Verification timestamp: 2026-07-12 14:08 EDT
+- Verification commands include `git status --short --branch`, `git log --oneline -10`, code/file reads, filtered grep, `npm run check`, and `npm run build`.
 
 ## What Seems Done
 
 - Concept and product direction documented.
-- First prototype routes exist.
+- SvelteKit app exists under `app/`.
+- Shared shell/nav exists.
 - Supabase client/auth/request/shop-card wiring exists.
 - Magic Link auth scaffold exists.
 - Shop card creation/upsert flow exists.
-- Help request creation flow exists and requires a shop card.
-- Feed currently renders sample requests.
-- Shop detail and request detail try live Supabase data when configured.
+- Help request creation flow exists and requires a shop card when Supabase/auth are enabled.
+- Public release gate exists in `app/src/routes/+layout.svelte` using `PUBLIC_SHOPFLOOR_PUBLIC_RELEASE`.
+- Home deployment procedure exists at `docs/deployment/shopfloor-belt-works-launch.md`.
+- Feed loads live safe-to-share requests from `help_requests_with_author` when Supabase is configured and otherwise shows a visibly labeled sample fallback.
+- Request detail attempts live Supabase data and has sample fallback behavior for known sample requests.
+- Request detail has a sample-data-only `Local support options` panel with non-endorsement labeling.
+- Shop detail loads live profile/tools/field-note data when configured and otherwise uses sample fallback behavior.
 - Markdown knowledge base MVP exists and renders through `/knowledge` routes.
 - KB implementation guide exists at `docs/KNOWLEDGE_BASE_IMPLEMENTATION.md`.
 - Starter KB content exists for repair tools, triage guides, and safety/privacy concepts.
 - Public About/mission page exists at `/about` and is linked from the app shell navigation.
-- Home page secondary CTA now points to `/about` instead of duplicating the feed CTA.
+- Field-notes archive page exists at `/field-notes` and renders sample field notes.
+- Support/feedback intake route exists at `/support` as a no-send, copyable tester note for controlled alpha walkthroughs.
+- Tester-loop script exists at `docs/plans/2026-07-12-shopfloor-tester-loop-script.md`.
+- AgentsRoom team packet exists under `AGENTSROOM_TEAM/`.
 
 ## Explicitly Not Done Yet
 
-These are open work, not current implementation:
+These remain open work unless a future code read proves otherwise:
 
-- Request responses schema/RLS and live response form.
-- Request completion flow.
-- Time ledger/history tables and UI.
-- Atomic completion-to-ledger RPC.
-- Field note creation route/form.
-- Structured tools/resources persistence.
-- User support/feedback intake.
+- Live Supabase/privacy verification against production or preview credentials.
+- Public release approval and gate opening.
+- Nate review/approval of `/about` public voice, risk, and promises.
+- Nate review of starter KB entries before treating them as authoritative.
+- Live request response form/action is not present in current app code.
+- Request completion flow is not present in current app code.
+- Time ledger/history UI is not present in current app code.
+- Atomic completion-to-ledger RPC is not present in current app code.
+- Field-note creation route/form is not present; `/field-notes` is an archive/sample display route.
+- Structured tools/resources persistence is not complete as a first-class live product surface.
+- Live Supabase/privacy verification for public alpha is still required before external tester data is entered.
+- README status still says `No app code yet`; this was not edited during this sprint because it is public-facing repo copy and should be approved separately.
 
-## Current Implemented Slice — 2026-06-29
+## Important Drift Notes
 
-- Request detail now renders a bounded `Local support options` panel when sample/category-matched support options exist.
-- The slice is sample-data-only: no live Akron resource import, no scraping, no standalone `/resources` route, and no endorsement/eligibility claims.
-- The panel is intentionally subordinate to the request/response loop and appears before responses as context, not as a directory center of gravity.
+Historical evidence from 2026-05-25 describes request responses, completion, and ledger work, but later review corrected that as stranded/historical drift. Current code reads during this sprint found:
 
-## Known Gaps / Open Work
+- `request_responses` only in sample data/planning/evidence text, not live route/form/schema implementation.
+- `time_ledger_entries` only in docs/evidence/planning text, not current app/schema code.
+- Field notes table and RLS policies exist in `supabase/schema.sql`, but there is no current field-note creation route/form.
+- Local support options are sample fixtures and must remain clearly labeled as unverified, non-endorsement support data.
 
-1. Live Supabase/database privacy verification remains incomplete.
-2. `help_requests_with_author` must use `security_invoker = true` in live Supabase and be verified with an anon-key test.
-3. Structured tools/resources are still not persisted as first-class schema objects.
-4. Field note creation flow is missing.
-5. Auth/testing path needs hardening before broader alpha.
-6. User support/feedback intake is missing.
-7. Knowledge base starter entries need Nate edit/review before being treated as authoritative.
-8. Server-side Supabase loader currently uses the shared anon client only for public reads; do not add authenticated server behavior there without a per-request server client.
+## Current Alpha Gates
 
-## Next Best Action
+1. **Public release gate**
+   - `PUBLIC_SHOPFLOOR_PUBLIC_RELEASE=false` or unset keeps the public app closed.
+   - Do not set true without explicit Nate approval.
 
-Recommended next slice:
+2. **Privacy / RLS gate**
+   - `help_requests_with_author` is defined with `security_invoker = true` in local schema.
+   - Live Supabase must still be verified with anon-key checks before true public alpha.
 
-1. Nate reviews `/about` copy for voice, risk, and public promises.
-2. Preview or deploy the KB MVP plus About page so Nate can edit against the real surface.
-3. Create a bounded next implementation task for field-note creation or structured tools/resources, but do not start both at once.
-4. Add user support/feedback intake before broader alpha testing.
+3. **Public copy gate**
+   - `/about`, README status, starter KB language, and release-facing copy require Nate review before treating them as public-approved.
+
+4. **Support / safety gate**
+   - `/support` now gives controlled testers a no-send copyable feedback path.
+   - Real support-ticket persistence, escalation ownership, and external tester data entry still require later privacy/support decisions.
+
+## Recommended Next Slice
+
+With the tester support path now present, prepare **field-note creation v0** as the next mission-facing app slice, while keeping live Supabase/privacy verification as the gate before external tester data is entered.
+
+Why field notes first:
+
+- Field notes are the memory/flywheel of the mutual-aid loop.
+- `/field-notes` already exists as an archive surface.
+- `supabase/schema.sql` already includes field-note RLS policies.
+- Request detail already states that resolved requests should produce a field note.
+- A creation card can be scoped without deploying, migrating live Supabase, or changing public copy.
 
 ## Blockers
 
-- Need Nate approval before publishing/deploying public-facing copy.
+- Need Nate approval before opening public release gate or changing public-facing promises.
 - Need live Supabase env/schema verification for true end-to-end privacy testing.
-- Need a decision on whether structured tools/resources wait until after public alpha surface is visible.
-
-## Open Questions for Nate
-
-- Is `/about` safe to publish after edits, or should it stay alpha/internal until the first community tester pass?
-- Should field-note creation or structured tools/resources be the next app feature after KB/About?
-- Should KB starter entries be marked public-alpha/starter visibly until Nate reviews them?
+- Need field-note creation v0 before the tester loop has a memory/flywheel path.
+- Need README status correction approval if editing public repo copy is in scope.
 
 ## Last Verified
 
-2026-06-10 — `npm run check`, `npm run build`, and local `/about` preview smoke passed.
+2026-07-12 — `npm run check` and `npm run build` passed from `app/`; support/feedback intake route added at `/support`; tester-loop script added at `docs/plans/2026-07-12-shopfloor-tester-loop-script.md`; public release gate unchanged; no deploy/commit/push/contact performed.
