@@ -164,6 +164,14 @@ Caveat: starter KB entries still need Nate review before being treated as author
 Dry private-proof pivot has passed:
 
 ```text
+LIVE_PRIVACY_VERIFY_READONLY_BLOCKED_DNS
+```
+
+Latest live gate result: Nate approved read-only anon live verification. The probe did not reach Supabase RLS because the configured Supabase project host failed DNS resolution (`ENOTFOUND`). Public `supabase.co` resolves, so this is likely stale/paused/deleted project URL or project-specific DNS, not total network failure. No write-denial probes ran.
+
+Previous dry proof:
+
+```text
 DRY_PRIVATE_PROOF_PASSED_LIVE_PRIVACY_VERIFY_GATED
 ```
 
@@ -183,10 +191,10 @@ APPROVE SHOPFLOOR LIVE PRIVACY VERIFY
 
 After approval, run one bounded proof slice:
 
-1. read-only live anon checks with `node scripts/shopfloor_privacy_probe.mjs --confirm-live`;
-2. if read-only behavior is understood, decide whether to run `--include-write-denial`;
-3. private internal walkthrough: request -> support path -> field note draft;
-4. only then consider support-ticket persistence or request-response/completion.
+2. Fix/confirm the Supabase project URL/project status, then rerun read-only live anon checks with `node scripts/shopfloor_privacy_probe.mjs --confirm-live`;
+3. Only after read-only live behavior is understood, decide whether to run `--include-write-denial`;
+4. private internal walkthrough: request -> support path -> field note draft;
+5. only then consider support-ticket persistence or request-response/completion.
 
 ## If another agent picks this up
 

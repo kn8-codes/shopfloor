@@ -13,6 +13,14 @@ Record receipts here. Agent narration is not evidence. Pretty words are how bugs
 - Checked by:
 ```
 
+## 2026-07-13 — Live read-only privacy probe blocked by Supabase project DNS
+
+- Command/source: after Nate approved `APPROVE SHOPFLOOR LIVE PRIVACY VERIFY`, ran the privacy probe in read-only mode only using local `app/.env` without printing secret values.
+- Result: live read-only privacy verification did not pass or fail RLS; it blocked before Supabase due DNS resolution failure for the configured project host. Public `supabase.co` resolved and responded, but the configured project host returned `ENOTFOUND`.
+- Verification: `node scripts/shopfloor_privacy_probe.mjs --confirm-live` produced `mode: read-only`, `write_denial_checks_included: false`, `secrets_printed: false`; all four read-only checks failed with `getaddrinfo ENOTFOUND [REDACTED_SUPABASE_PROJECT_HOST].supabase.co`. No write-denial probes ran.
+- File/path/link: `docs/receipts/2026-07-13__shopfloor-live-readonly-privacy-probe-blocked.md`
+- Checked by: Egon at 2026-07-13
+
 ## 2026-07-13 — Dry private-proof pivot passed; live privacy gate remains closed
 
 - Command/source: after belt.loop acceptance, pivoted to queued ShopFloor private-proof packet; inspected git state, existing privacy plan, schema/RLS, env key presence without printing values, and dirty `scripts/shopfloor_privacy_probe.mjs`.

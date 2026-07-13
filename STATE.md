@@ -99,7 +99,15 @@ Historical evidence from 2026-05-25 describes request responses, completion, and
 
 ## Recommended Next Slice
 
-Latest completed slice: **dry private-proof pivot**.
+Latest completed slice: **live read-only privacy probe blocked before RLS by Supabase project DNS**.
+
+```text
+LIVE_PRIVACY_VERIFY_READONLY_BLOCKED_DNS
+```
+
+Nate approved read-only anon live verification. The probe used local `app/.env` without printing secrets, did not run write-denial probes, and failed before reaching Supabase because the configured project host returned `ENOTFOUND`. Public `supabase.co` resolves from this machine.
+
+Previous completed slice: **dry private-proof pivot**.
 
 ```text
 DRY_PRIVATE_PROOF_PASSED_LIVE_PRIVACY_VERIFY_GATED
