@@ -14,7 +14,8 @@ Current mission frame: **Aid is the visible action. Relationship is the infrastr
 
 Repo: `https://github.com/kn8-codes/shopfloor`  
 Canonical branch: `main`  
-Current verified HEAD: `f606516 Harden ShopFloor private proof gate`
+Current HEAD: `57aa70b Refresh ShopFloor dry proof state`  
+Current verified implementation commit: `f606516 Harden ShopFloor private proof gate`
 
 ShopFloor has a SvelteKit app under `app/`, Supabase schema under `supabase/schema.sql`, product docs under `docs/`, a file-backed Markdown knowledge base under `app/src/lib/content/kb/`, an explicit public release gate, tester support intake, field-note creation v0, and AgentsRoom team scaffolding under `AGENTSROOM_TEAM/`.
 

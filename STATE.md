@@ -22,7 +22,8 @@ Current verified technical state:
 
 - Repo: `https://github.com/kn8-codes/shopfloor`
 - Canonical branch: `main`
-- Current HEAD: `f606516 Harden ShopFloor private proof gate`
+- Current HEAD: `57aa70b Refresh ShopFloor dry proof state`
+- Current verified implementation commit: `f606516 Harden ShopFloor private proof gate`
 - Tracking state: `main...origin/main`
 - App root: `app/`
 - Verification timestamp: 2026-07-13 05:49 EDT
@@ -129,4 +130,4 @@ Recommended next actions:
 
 ## Last Verified
 
-2026-07-13 — Dry private-proof pivot committed as `f606516 Harden ShopFloor private proof gate`: privacy probe now requires explicit `--confirm-live` before any Supabase network access, `--include-write-denial` before anon insert-denial probes, `npm run check` passed with 0 errors / 0 warnings, `npm run build` passed, and local dry route smoke passed for `/support`, `/field-notes`, and `/field-notes/new`. Live privacy verification remains gated behind `APPROVE SHOPFLOOR LIVE PRIVACY VERIFY`.
+2026-07-13 — Dry private-proof pivot implementation committed as `f606516 Harden ShopFloor private proof gate`, with state refresh committed after it. The privacy probe now requires explicit `--confirm-live` before any Supabase network access, `--include-write-denial` before anon insert-denial probes, `npm run check` passed with 0 errors / 0 warnings, `npm run build` passed, and local dry route smoke passed for `/support`, `/field-notes`, and `/field-notes/new`. Live privacy verification remains gated behind `APPROVE SHOPFLOOR LIVE PRIVACY VERIFY`.
