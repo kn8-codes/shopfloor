@@ -22,7 +22,7 @@ Current verified technical state:
 
 - Repo: `https://github.com/kn8-codes/shopfloor`
 - Canonical branch: `main`
-- Current HEAD: `57aa70b Refresh ShopFloor dry proof state`
+- Current HEAD: see `git log --oneline -1` locally; this state file intentionally avoids self-referential commit churn.
 - Current verified implementation commit: `f606516 Harden ShopFloor private proof gate`
 - Tracking state: `main...origin/main`
 - App root: `app/`
