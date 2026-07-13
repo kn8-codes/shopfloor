@@ -1,6 +1,6 @@
 # NEXT.md — ShopFloor
 
-_Last updated: 2026-07-12_
+_Last updated: 2026-07-13_
 
 ## What this project is
 
@@ -14,7 +14,7 @@ Current mission frame: **Aid is the visible action. Relationship is the infrastr
 
 Repo: `https://github.com/kn8-codes/shopfloor`  
 Canonical branch: `main`  
-Current verified HEAD: `f1bea0e Add ShopFloor field note creation v0`
+Current verified HEAD: `2961711 Add ShopFloor private proof verification packet` plus local dry-private-proof changes pending commit
 
 ShopFloor has a SvelteKit app under `app/`, Supabase schema under `supabase/schema.sql`, product docs under `docs/`, a file-backed Markdown knowledge base under `app/src/lib/content/kb/`, an explicit public release gate, tester support intake, field-note creation v0, and AgentsRoom team scaffolding under `AGENTSROOM_TEAM/`.
 
@@ -160,13 +160,32 @@ Caveat: starter KB entries still need Nate review before being treated as author
 
 ## Highest-priority next move
 
-Use GitHub `main` as the truth source, then do one bounded proof slice:
+Dry private-proof pivot has passed:
 
-1. **Live Supabase/privacy verification** — recommended next gate before real tester data.
-2. **Private internal walkthrough** — request -> support path -> field note draft with sample or consented data.
-3. **Support/feedback intake persistence design** — only after copyable `/support` is tested.
-4. **Request response/completion v0** — next product loop after field-note and privacy proof.
-5. **Manager/foundry docs refresh** — useful continuity cleanup, but do not let it outrank product proof.
+```text
+DRY_PRIVATE_PROOF_PASSED_LIVE_PRIVACY_VERIFY_GATED
+```
+
+Verified locally:
+
+- `scripts/shopfloor_privacy_probe.mjs` refuses live Supabase unless `--confirm-live` is passed;
+- write-denial probes require `--include-write-denial`;
+- `npm run check` passed;
+- `npm run build` passed;
+- local route smoke passed for `/support`, `/field-notes`, and `/field-notes/new`.
+
+Next live gate:
+
+```text
+APPROVE SHOPFLOOR LIVE PRIVACY VERIFY
+```
+
+After approval, run one bounded proof slice:
+
+1. read-only live anon checks with `node scripts/shopfloor_privacy_probe.mjs --confirm-live`;
+2. if read-only behavior is understood, decide whether to run `--include-write-denial`;
+3. private internal walkthrough: request -> support path -> field note draft;
+4. only then consider support-ticket persistence or request-response/completion.
 
 ## If another agent picks this up
 

@@ -13,6 +13,14 @@ Record receipts here. Agent narration is not evidence. Pretty words are how bugs
 - Checked by:
 ```
 
+## 2026-07-13 — Dry private-proof pivot passed; live privacy gate remains closed
+
+- Command/source: after belt.loop acceptance, pivoted to queued ShopFloor private-proof packet; inspected git state, existing privacy plan, schema/RLS, env key presence without printing values, and dirty `scripts/shopfloor_privacy_probe.mjs`.
+- Result: dry private-proof route health passed. Privacy probe was hardened so it refuses any live Supabase network probe without `--confirm-live`, and anon insert-denial probes require additional `--include-write-denial`. Live privacy verification is still gated behind `APPROVE SHOPFLOOR LIVE PRIVACY VERIFY`.
+- Verification: `node --check scripts/shopfloor_privacy_probe.mjs` passed; probe help printed no secrets; no-confirm probe exited `2` with refusal; from `app/`, `npm run check` passed with 0 errors / 0 warnings and `npm run build` passed with adapter-auto warning only; local preview on `127.0.0.1:4188` returned required markers for `/support`, `/field-notes`, and `/field-notes/new`.
+- File/path/link: `scripts/shopfloor_privacy_probe.mjs`; `docs/plans/2026-07-13-shopfloor-private-proof-pivot.md`; `docs/receipts/2026-07-13__shopfloor-private-proof-dry-pivot.md`; `STATE.md`; `NEXT.md`
+- Checked by: Egon at 2026-07-13
+
 ## 2026-07-12 — Field-note creation v0 committed and pushed
 
 - Command/source: continued from the reviewed field-note autostart diff after Nate approved pragmatic continuation; added `/field-notes` server loader, live-capable field-note loading, `/field-notes/new` creation route, client-side validation, preview, and safer copy away from ratings/content-dashboard behavior.

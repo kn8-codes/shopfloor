@@ -1,6 +1,6 @@
 # Current State — ShopFloor
 
-_Last updated: 2026-07-12_
+_Last updated: 2026-07-13_
 
 ## Active Goal
 
@@ -25,8 +25,8 @@ Current verified technical state:
 - Current HEAD: `f1bea0e Add ShopFloor field note creation v0`
 - Tracking state: `main...origin/main`
 - App root: `app/`
-- Verification timestamp: 2026-07-12 17:54 EDT
-- Verification commands include `npm run check`, `npm run build`, staged secret scan, route smoke for `/field-notes` and `/field-notes/new`, and remote HEAD verification.
+- Verification timestamp: 2026-07-13 05:49 EDT
+- Latest verification commands include `node --check scripts/shopfloor_privacy_probe.mjs`, probe explicit-gate smoke, `npm run check`, `npm run build`, and local dry route smoke for `/support`, `/field-notes`, and `/field-notes/new`.
 
 ## What Seems Done
 
@@ -98,13 +98,26 @@ Historical evidence from 2026-05-25 describes request responses, completion, and
 
 ## Recommended Next Slice
 
-With support intake and field-note creation v0 now present, the next useful slice is **private proof / live privacy verification**, not another broad feature.
+Latest completed slice: **dry private-proof pivot**.
+
+```text
+DRY_PRIVATE_PROOF_PASSED_LIVE_PRIVACY_VERIFY_GATED
+```
+
+What changed:
+
+- privacy probe now refuses live Supabase access unless `--confirm-live` is passed;
+- anon insert-denial probes require the additional `--include-write-denial` flag;
+- `npm run check` and `npm run build` passed from `app/`;
+- local dry route smoke passed for `/support`, `/field-notes`, and `/field-notes/new`.
+
+Next useful slice is **live Supabase/privacy verification** after explicit approval.
 
 Recommended next actions:
 
-1. Verify live Supabase privacy/RLS behavior with anon-key checks and authenticated test users.
-2. Run a private internal walkthrough: request -> help path -> field note draft.
-3. Refresh manager/foundry docs if a ShopFloor Manager lane remains useful.
+1. Approve and run read-only live anon checks with `APPROVE SHOPFLOOR LIVE PRIVACY VERIFY`.
+2. Only after read-only live behavior is understood, decide whether to run write-denial probes.
+3. Then run a private internal walkthrough: request -> support path -> field note draft.
 4. Only then decide whether to design support-ticket persistence or request-response/completion.
 
 ## Blockers
@@ -116,4 +129,4 @@ Recommended next actions:
 
 ## Last Verified
 
-2026-07-12 — Field-note creation v0 committed and pushed as `f1bea0e`; `npm run check` and `npm run build` passed from `app/`; staged secret scan clean; remote `main` matches local HEAD; no deploy/public release/contact performed.
+2026-07-13 — Dry private-proof pivot passed: privacy probe now requires explicit `--confirm-live` before any Supabase network access, `--include-write-denial` before anon insert-denial probes, `npm run check` passed with 0 errors / 0 warnings, `npm run build` passed, and local dry route smoke passed for `/support`, `/field-notes`, and `/field-notes/new`. Live privacy verification remains gated behind `APPROVE SHOPFLOOR LIVE PRIVACY VERIFY`.
