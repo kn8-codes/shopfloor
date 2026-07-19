@@ -86,9 +86,9 @@ Historical evidence from 2026-05-25 describes request responses, completion, and
    - Do not set true without explicit Nate approval.
 
 2. **Privacy / RLS gate**
-   - Read-only anon checks passed on 2026-07-15 for the then-applied schema: safe visible request counts were consistent and public field-note count was 0.
-   - `supabase/migrations/20260719000000_prealpha_privacy_hardening.sql` is source-ready but not applied. It changes new field notes to restricted-by-default and anonymous reads to publication-only.
-   - Do not accept external tester data until a verified migration route applies it and anon/author/unrelated-user checks pass.
+   - Migration `20260719000000_prealpha_privacy_hardening.sql` is applied to the verified linked Supabase project.
+   - Post-apply anonymous proof passed: protected-row inserts were denied with RLS `42501`; public field-note count remains 0.
+   - Do not accept external tester data until separately approved controlled author/unrelated-user proof passes with test-data cleanup/retention decided.
 
 3. **Public copy gate**
    - `/support`, `/field-notes`, `/new-request`, and `/knowledge` received a local safety-boundary pass on 2026-07-15.
@@ -100,35 +100,35 @@ Historical evidence from 2026-05-25 describes request responses, completion, and
 
 ## Recommended Next Slice
 
-Latest completed source slice: **pre-alpha RLS hardening migration ready**.
+Latest completed live slice: **pre-alpha RLS hardening applied; anonymous proof passed**.
 
 ```text
-RLS_HARDENING_MIGRATION_READY_LIVE_APPLY_BLOCKED
+RLS_HARDENING_APPLIED_ANON_PROOF_PASSED
 ```
 
 What changed:
 
-- migration-ready RLS source adds owner-read coverage, defaults help requests private, and changes field notes to restricted/published-only visibility;
-- app now persists a field-note privacy acknowledgement and explicitly creates a restricted note;
-- `npm run check` passed with 0 errors / 0 warnings and `npm run build` passed on 2026-07-19.
+- remote migration history records `20260719000000_prealpha_privacy_hardening.sql`;
+- new help requests default private; field notes are restricted by default and publication-only for anonymous reads; the app persists a privacy acknowledgement;
+- post-apply anonymous proof passed: attempts to insert shop cards, help requests, and field notes were denied by RLS `42501`, and no probe data was created.
 
-Live state:
+Remaining state:
 
-- no SQL was applied; this checkout has no Supabase CLI, `config.toml`, `psql`, or verified authenticated project link;
-- no credential was read or printed; no deploy, release-gate change, or data write occurred.
+- no public release/deploy/GitHub push/service-role access occurred;
+- controlled authenticated author/unrelated-user proof still needs separate approval because it requires test accounts/data and a cleanup or retention decision.
 
 Recommended next actions:
 
-1. Establish a verified Supabase migration route, apply the tracked migration, and run anon/author/unrelated-user RLS checks.
+1. Approve a bounded authenticated-role RLS proof using controlled non-neighbor test accounts/data and explicit cleanup.
 2. Keep the public release gate closed and external tester data out until that proof passes.
 3. Then run the private walkthrough and decide whether to design support persistence or request-response/completion.
 
 ## Blockers
 
-- Live migration application requires a verified authenticated Supabase route; do not substitute an improvised SQL-console workflow.
+- Authenticated-role RLS proof needs an explicit controlled-test-data and cleanup/retention authorization.
 - Need Nate approval before opening public release gate or changing public-facing promises.
 - Need support ownership design before persistent support intake.
 
 ## Last Verified
 
-2026-07-19 — Pre-alpha RLS hardening migration source and aligned app/schema copy verified with `npm run check`, `npm run build`, static contract checks, `node --check`, and `git diff --check`. Live migration deliberately not attempted because the local project lacks safe, verified migration tooling.
+2026-07-19 — Applied `20260719000000_prealpha_privacy_hardening.sql` through the verified linked Supabase CLI after a clean dry-run and Nate’s explicit approval. Remote migration history matches. Post-apply anonymous read/write-denial proof passed; no secrets printed and no probe data persisted.

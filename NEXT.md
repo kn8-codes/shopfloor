@@ -136,9 +136,9 @@ Caveat: starter KB entries still need Nate review before being treated as author
 
 ## Current gaps / blockers
 
-1. **Migration application and RLS proof**
-   - The source-controlled migration `supabase/migrations/20260719000000_prealpha_privacy_hardening.sql` is ready but not applied live.
-   - It needs a verified Supabase CLI/project link or separately approved authenticated migration path, followed by anon/author/unrelated-user checks.
+1. **Authenticated-role RLS proof**
+   - Migration `20260719000000_prealpha_privacy_hardening.sql` is applied to the verified linked Supabase project; anonymous read/write-denial proof passed.
+   - Controlled author/unrelated-user proof is still approval-gated because it requires test accounts/data and an explicit cleanup or retention decision. Do not use real neighbor data.
 
 2. **Request response / completion missing**
    - Help request creation exists.
@@ -158,21 +158,21 @@ Caveat: starter KB entries still need Nate review before being treated as author
 
 ## Highest-priority next move
 
-The pre-alpha RLS hardening source is ready:
+The pre-alpha RLS hardening migration is applied:
 
 ```text
-RLS_HARDENING_MIGRATION_READY_LIVE_APPLY_BLOCKED
+RLS_HARDENING_APPLIED_ANON_PROOF_PASSED
 ```
 
-- `supabase/migrations/20260719000000_prealpha_privacy_hardening.sql` restricts new field notes by default, makes public reads publication-only, persists acknowledgements, and closes owner-read gaps.
-- Fresh `npm run check` and `npm run build` passed on 2026-07-19.
-- The migration was **not applied live**: this checkout has no Supabase CLI, `config.toml`, `psql`, or verified authenticated project link. No credentials or SQL-console workaround were used.
+- Remote migration history records `20260719000000_prealpha_privacy_hardening.sql`; it restricts new field notes by default, makes public reads publication-only, persists acknowledgements, and closes owner-read gaps.
+- Post-apply anonymous proof passed: protected-row inserts were denied with RLS `42501`; no probe data was created; public field-note count remains zero.
+- Remaining gate: controlled authenticated author/unrelated-user tests need separate approval because they require test identities/data and cleanup policy.
 
 Next useful gate options:
 
-1. Provision or verify a proper Supabase migration route, then apply this migration and run anon/author/unrelated-user RLS checks.
-2. Run a private internal walkthrough against the currently deployed/previewed app only after the database gate is understood.
-3. Keep the public release gate closed; do not enter external tester data until the applied migration is verified.
+1. Approve a bounded controlled authenticated-role RLS proof with test-account/data cleanup plan.
+2. Keep the public release gate closed and external tester data out until that proof passes.
+3. Then run a private internal walkthrough against the applied schema.
 4. Only then consider support-ticket persistence or request-response/completion.
 
 ## If another agent picks this up

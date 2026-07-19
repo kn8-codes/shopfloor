@@ -26,20 +26,11 @@
       "status": "complete",
       "owner": "egon/default",
       "dependencies": ["shopfloor-private-proof-privacy-packet"],
-      "blocker": "None. Live read-only anon verification passed; write-denial remained out of scope.",
-      "completion_criteria": [
-        "live Supabase URL/project ref verified without printing secrets",
-        "read-only anon checks report reachable tables/views and RLS behavior",
-        "no write-denial probes run unless separately approved",
-        "receipt records exact commands and redacted results"
-      ],
-      "testing_criteria": [
-        "node --check scripts/shopfloor_privacy_probe.mjs passes if script is used",
-        "probe requires --confirm-live and refuses accidental live access",
-        "receipt confirms no schema write/no deploy/no credential printing"
-      ],
-      "receipts": ["docs/receipts/2026-07-15__shopfloor-supabase-readonly-live-verify.md"],
-      "approval_gate": "Approved and completed as read-only verification; no write-denial authorization was consumed."
+      "blocker": "None. Read-only anon verification and separately approved anonymous write-denial verification passed.",
+      "completion_criteria": ["live project verified without printing secrets", "redacted anon checks recorded", "no schema write except separately approved migration"],
+      "testing_criteria": ["probe requires --confirm-live", "write-denial requires --include-write-denial"],
+      "receipts": ["docs/receipts/2026-07-15__shopfloor-supabase-readonly-live-verify.md", "docs/receipts/2026-07-19__prealpha-rls-hardening-applied.md"],
+      "approval_gate": "Completed; anonymous write-denial was explicitly approved."
     },
     {
       "id": "shopfloor-fieldnote-privacy-preflight",
@@ -47,42 +38,35 @@
       "status": "complete",
       "owner": "egon/default",
       "dependencies": ["shopfloor-live-supabase-privacy-verify-readonly"],
-      "blocker": "None for the application-level acknowledgement guard. Schema-level protection is tracked separately.",
-      "completion_criteria": [
-        "privacy warning copy visible on /field-notes/new",
-        "acknowledgement required before save or before submission path",
-        "public release gate remains unchanged",
-        "support route remains no-send/copy-only unless separately approved"
-      ],
-      "testing_criteria": [
-        "npm run check passes from app/",
-        "npm run build passes from app/",
-        "receipt confirms no deploy/no schema write/no credential use"
-      ],
+      "blocker": "None for the application-level acknowledgement guard; live schema hardening is tracked separately.",
+      "completion_criteria": ["privacy warning visible", "acknowledgement required before save", "public release gate unchanged", "support remains no-send"],
+      "testing_criteria": ["npm run check", "npm run build"],
       "receipts": ["docs/receipts/2026-07-15__field-note-public-ack-guard.md"],
-      "approval_gate": "Approved and completed as a local application/copy slice."
+      "approval_gate": "Completed as a local application/copy slice."
     },
     {
       "id": "shopfloor-prealpha-rls-hardening-migration",
-      "title": "Apply and verify pre-alpha privacy-hardening migration against the verified Supabase project",
-      "status": "blocked",
+      "title": "Apply pre-alpha privacy-hardening migration and anonymous RLS proof",
+      "status": "complete",
       "owner": "egon/default",
       "dependencies": ["shopfloor-fieldnote-privacy-preflight"],
-      "blocker": "Migration-ready source is committed locally, but this checkout has no Supabase CLI, config.toml, migrations link, psql client, or verified authenticated migration route. Do not apply through an improvised console session.",
-      "completion_criteria": [
-        "verified target project and authenticated migration client",
-        "migration 20260719000000_prealpha_privacy_hardening.sql applied",
-        "anon/author/unrelated-user RLS checks pass against applied schema",
-        "receipt records redacted results and no release/deploy action"
-      ],
-      "testing_criteria": [
-        "npm run check and npm run build pass before and after migration",
-        "anon cannot read restricted field notes or insert protected rows",
-        "author can read own private request and restricted note",
-        "published-only field-note read policy is verified"
-      ],
-      "receipts": ["docs/receipts/2026-07-19__prealpha-rls-hardening-migration-ready.md"],
-      "approval_gate": "Nate authorized source preparation; a verified authenticated migration route remains required before live schema mutation."
+      "blocker": "None for migration application and anonymous proof. Authenticated-role proof remains a separate approval-gated task.",
+      "completion_criteria": ["verified target and authenticated CLI", "migration 20260719000000 applied", "anonymous read/write-denial checks pass", "redacted receipt records no release/deploy action"],
+      "testing_criteria": ["linked dry-run lists only migration 20260719000000", "remote migration history records it", "anon cannot insert protected rows"],
+      "receipts": ["docs/receipts/2026-07-19__prealpha-rls-hardening-migration-ready.md", "docs/receipts/2026-07-19__prealpha-rls-hardening-applied.md"],
+      "approval_gate": "Nate explicitly approved live application after the linked dry-run."
+    },
+    {
+      "id": "shopfloor-authenticated-role-rls-proof",
+      "title": "Run controlled author/unrelated-user RLS proof against the applied privacy schema",
+      "status": "needs_approval",
+      "owner": "egon/default",
+      "dependencies": ["shopfloor-prealpha-rls-hardening-migration"],
+      "blocker": "Requires explicit approval to create controlled authenticated test identities/data and a cleanup/retention plan. Do not use real neighbor data.",
+      "completion_criteria": ["author can read own private request and restricted field note", "unrelated signed-in user cannot read either", "publication-only field-note read policy is demonstrated", "test rows/accounts are removed or retained only under explicit decision"],
+      "testing_criteria": ["all role assertions are recorded redacted", "no public release/deploy", "cleanup result is receipted"],
+      "receipts": ["docs/receipts/2026-07-19__prealpha-rls-hardening-applied.md"],
+      "approval_gate": "Nate must approve test-account/data creation and cleanup plan before execution."
     }
   ]
 }

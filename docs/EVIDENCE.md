@@ -13,6 +13,15 @@ Record receipts here. Agent narration is not evidence. Pretty words are how bugs
 - Checked by:
 ```
 
+## 2026-07-19 — Pre-alpha RLS hardening applied and anonymous proof passed
+
+- Command/source: authenticated and linked Supabase CLI v2.109.1; confirmed a linked dry-run would apply only `20260719000000_prealpha_privacy_hardening.sql`; after Nate’s explicit go, applied it with `supabase db push --linked --yes`.
+- Result: remote migration history now records `20260719000000`; anonymous inserts into `shop_cards`, `help_requests`, and `field_notes` each fail with Postgres RLS error `42501`; public field-note count remains 0.
+- Verification: linked migration list matches local/remote version; `node scripts/shopfloor_privacy_probe.mjs --confirm-live --include-write-denial` returned `ok=true` and prints no secrets.
+- Scope boundary: authenticated author/unrelated-user proof was not run because it needs separately approved controlled accounts/data and cleanup. No public release/deploy/GitHub push/service-role access occurred.
+- File/path/link: `docs/receipts/2026-07-19__prealpha-rls-hardening-applied.md`
+- Checked by: Egon at 2026-07-19
+
 ## 2026-07-19 — Pre-alpha RLS hardening migration ready
 
 - Command/source: added `supabase/migrations/20260719000000_prealpha_privacy_hardening.sql`, aligned `supabase/schema.sql`, and changed field-note creation to persist a privacy acknowledgement and create notes as restricted.
