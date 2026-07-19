@@ -72,7 +72,7 @@ create table if not exists public.help_requests (
   urgency text not null default 'normal',
   budget_note text,
   status text not null default 'open',
-  safe_to_share boolean not null default true,
+  safe_to_share boolean not null default false,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   constraint help_requests_category_check
@@ -111,9 +111,15 @@ create table if not exists public.field_notes (
   time_required text,
   safety_level text not null,
   neighborhood_tip text,
+  visibility text not null default 'restricted',
+  published_at timestamptz,
+  withdrawn_at timestamptz,
+  privacy_acknowledged_at timestamptz,
   created_at timestamptz not null default now(),
   constraint field_notes_safety_level_check
     check (safety_level in ('safe', 'temporary', 'janky')),
+  constraint field_notes_visibility_check
+    check (visibility in ('restricted', 'public', 'hidden')),
   constraint field_notes_title_length_check
     check (char_length(title) between 5 and 140),
   constraint field_notes_problem_length_check
@@ -169,6 +175,11 @@ on public.shop_cards
 for select
 using (is_visible = true);
 
+create policy "users can read own shop card"
+on public.shop_cards
+for select
+using (auth.uid() = id);
+
 create policy "users can insert own shop card"
 on public.shop_cards
 for insert
@@ -185,6 +196,11 @@ create policy "public can read open-ish requests"
 on public.help_requests
 for select
 using (safe_to_share = true and status in ('open', 'in_progress', 'resolved'));
+
+create policy "authors can read own requests"
+on public.help_requests
+for select
+using (auth.uid() = author_id);
 
 create policy "users with a shop card can create requests"
 on public.help_requests
@@ -207,15 +223,28 @@ using (auth.uid() = author_id)
 with check (auth.uid() = author_id);
 
 -- field_notes
-create policy "public can read field notes"
+-- New notes stay restricted. A separate reviewed publication flow is required
+-- before anonymous users can read a note.
+create policy "public can read published field notes"
 on public.field_notes
 for select
-using (true);
+using (visibility = 'public' and withdrawn_at is null);
 
-create policy "users can create own field notes"
+create policy "authors can read own field notes"
+on public.field_notes
+for select
+using (auth.uid() = author_id);
+
+create policy "users can create own restricted field notes"
 on public.field_notes
 for insert
-with check (auth.uid() = author_id);
+with check (
+  auth.uid() = author_id
+  and visibility = 'restricted'
+  and published_at is null
+  and withdrawn_at is null
+  and privacy_acknowledged_at is not null
+);
 
 create policy "authors can update own field notes"
 on public.field_notes

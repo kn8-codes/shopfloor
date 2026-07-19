@@ -169,7 +169,7 @@
       <input bind:checked={form.safe_to_share} type="checkbox" />
       <div>
         <strong>Safe to share publicly</strong>
-        <p>Uncheck this if the request needs to stay more private when real backend wiring lands.</p>
+        <p>Keep this checked only if the request is safe for the public feed. Uncheck it for private details, exact locations, sensitive situations, or anything that should stay inside the tester loop.</p>
       </div>
     </label>
 
@@ -177,7 +177,7 @@
       <button type="submit" disabled={!supabaseEnabled || !$authState.user || !hasShopCard || status === 'submitting'}>
         {status === 'submitting' ? 'Posting...' : 'Post request'}
       </button>
-      <span class="note">Posting is live once Supabase env and schema are in place.</span>
+      <span class="note">Posting is live when signed in. Public release is still gated, but safe-to-share requests may be readable through the current Supabase policies.</span>
     </div>
 
     {#if message}

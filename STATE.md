@@ -1,6 +1,6 @@
 # Current State — ShopFloor
 
-_Last updated: 2026-07-13_
+_Last updated: 2026-07-19_
 
 ## Active Goal
 
@@ -58,7 +58,7 @@ Current verified technical state:
 
 These remain open work unless a future code read proves otherwise:
 
-- Live Supabase/privacy verification against production or preview credentials.
+- Live Supabase write-denial and management/schema metadata verification against production or preview credentials.
 - Public release approval and gate opening.
 - Nate review/approval of `/about` public voice, risk, and promises.
 - Nate review of starter KB entries before treating them as authoritative.
@@ -67,7 +67,7 @@ These remain open work unless a future code read proves otherwise:
 - Time ledger/history UI is not present in current app code.
 - Atomic completion-to-ledger RPC is not present in current app code.
 - Structured tools/resources persistence is not complete as a first-class live product surface.
-- Live Supabase/privacy verification for public alpha is still required before external tester data is entered.
+- Live write-denial probes, deeper schema/privacy hardening, and final public-copy approval are still required before external tester data is entered. The field-note creation UI/helper now requires an explicit public-read acknowledgement before saving, and alpha-facing copy now carries clearer support/privacy/endorsement boundaries.
 - Support/feedback intake is copyable/no-send only; real persistence/routing is not designed yet.
 
 ## Important Drift Notes
@@ -86,12 +86,13 @@ Historical evidence from 2026-05-25 describes request responses, completion, and
    - Do not set true without explicit Nate approval.
 
 2. **Privacy / RLS gate**
-   - `help_requests_with_author` is defined with `security_invoker = true` in local schema.
-   - Live Supabase must still be verified with anon-key checks before true public alpha.
-   - Field notes currently have public read policy in schema; this is acceptable for the prototype archive but must be reviewed before external tester data.
+   - Read-only anon checks passed on 2026-07-15 for the then-applied schema: safe visible request counts were consistent and public field-note count was 0.
+   - `supabase/migrations/20260719000000_prealpha_privacy_hardening.sql` is source-ready but not applied. It changes new field notes to restricted-by-default and anonymous reads to publication-only.
+   - Do not accept external tester data until a verified migration route applies it and anon/author/unrelated-user checks pass.
 
 3. **Public copy gate**
-   - `/about`, starter KB language, and release-facing copy require Nate review before treating them as public-approved.
+   - `/support`, `/field-notes`, `/new-request`, and `/knowledge` received a local safety-boundary pass on 2026-07-15.
+   - Nate still needs to review release-facing copy before treating it as public-approved.
 
 4. **Support / safety gate**
    - `/support` gives controlled testers a no-send copyable feedback path.
@@ -99,43 +100,35 @@ Historical evidence from 2026-05-25 describes request responses, completion, and
 
 ## Recommended Next Slice
 
-Latest completed slice: **live read-only privacy probe blocked before RLS by Supabase project DNS**.
+Latest completed source slice: **pre-alpha RLS hardening migration ready**.
 
 ```text
-LIVE_PRIVACY_VERIFY_READONLY_BLOCKED_DNS
-```
-
-Nate approved read-only anon live verification. The probe used local `app/.env` without printing secrets, did not run write-denial probes, and failed before reaching Supabase because the configured project host returned `ENOTFOUND`. Public `supabase.co` resolves from this machine.
-
-Previous completed slice: **dry private-proof pivot**.
-
-```text
-DRY_PRIVATE_PROOF_PASSED_LIVE_PRIVACY_VERIFY_GATED
+RLS_HARDENING_MIGRATION_READY_LIVE_APPLY_BLOCKED
 ```
 
 What changed:
 
-- privacy probe now refuses live Supabase access unless `--confirm-live` is passed;
-- anon insert-denial probes require the additional `--include-write-denial` flag;
-- `npm run check` and `npm run build` passed from `app/`;
-- local dry route smoke passed for `/support`, `/field-notes`, and `/field-notes/new`.
+- migration-ready RLS source adds owner-read coverage, defaults help requests private, and changes field notes to restricted/published-only visibility;
+- app now persists a field-note privacy acknowledgement and explicitly creates a restricted note;
+- `npm run check` passed with 0 errors / 0 warnings and `npm run build` passed on 2026-07-19.
 
-Next useful slice is **live Supabase/privacy verification** after explicit approval.
+Live state:
+
+- no SQL was applied; this checkout has no Supabase CLI, `config.toml`, `psql`, or verified authenticated project link;
+- no credential was read or printed; no deploy, release-gate change, or data write occurred.
 
 Recommended next actions:
 
-1. Approve and run read-only live anon checks with `APPROVE SHOPFLOOR LIVE PRIVACY VERIFY`.
-2. Only after read-only live behavior is understood, decide whether to run write-denial probes.
-3. Then run a private internal walkthrough: request -> support path -> field note draft.
-4. Only then decide whether to design support-ticket persistence or request-response/completion.
+1. Establish a verified Supabase migration route, apply the tracked migration, and run anon/author/unrelated-user RLS checks.
+2. Keep the public release gate closed and external tester data out until that proof passes.
+3. Then run the private walkthrough and decide whether to design support persistence or request-response/completion.
 
 ## Blockers
 
+- Live migration application requires a verified authenticated Supabase route; do not substitute an improvised SQL-console workflow.
 - Need Nate approval before opening public release gate or changing public-facing promises.
-- Need live Supabase env/schema verification for true end-to-end privacy testing.
-- Need private proof before external tester data is entered.
 - Need support ownership design before persistent support intake.
 
 ## Last Verified
 
-2026-07-13 — Dry private-proof pivot implementation committed as `f606516 Harden ShopFloor private proof gate`, with state refresh committed after it. The privacy probe now requires explicit `--confirm-live` before any Supabase network access, `--include-write-denial` before anon insert-denial probes, `npm run check` passed with 0 errors / 0 warnings, `npm run build` passed, and local dry route smoke passed for `/support`, `/field-notes`, and `/field-notes/new`. Live privacy verification remains gated behind `APPROVE SHOPFLOOR LIVE PRIVACY VERIFY`.
+2026-07-19 — Pre-alpha RLS hardening migration source and aligned app/schema copy verified with `npm run check`, `npm run build`, static contract checks, `node --check`, and `git diff --check`. Live migration deliberately not attempted because the local project lacks safe, verified migration tooling.

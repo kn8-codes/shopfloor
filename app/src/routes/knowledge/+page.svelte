@@ -18,6 +18,9 @@
     <p>
       The ShopFloor knowledge base is a starter library of tools, repair triage, safety rules, and practical lessons. Field notes are what happened. Knowledge base entries are what we learned.
     </p>
+    <p class="boundary">
+      Starter entries are not professional advice, emergency instructions, or endorsements. For electricity, vehicles, heat, chemicals, housing safety, medical needs, or personal data, slow down and use qualified help when the risk is beyond a neighbor fix.
+    </p>
   </div>
 
   {#each Object.entries(data.groups) as [type, entries]}
@@ -50,5 +53,5 @@
 </div>
 
 <style>
-  .page{max-width:1040px;margin:0 auto;padding:24px}.card{background:rgba(22,26,32,.94);border:1px solid #2a313d;border-radius:18px;padding:20px}.intro{margin-bottom:28px}.eyebrow{color:#f59e0b;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:700}h1{font-size:42px;line-height:1.05;margin:10px 0 14px}h2{margin:0}p{color:#9da7b3;line-height:1.6}.section{margin:28px 0}.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;color:#9da7b3}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}.entry{text-decoration:none;color:#ece7dc;display:flex;flex-direction:column;gap:10px}.entry:hover{border-color:#f59e0b}.entry h3{margin:0;font-size:22px}.entry p{margin:0}.entry-top{display:flex;justify-content:space-between;gap:12px}.type,.status,.tags span{color:#9da7b3;border:1px solid #2a313d;border-radius:999px;padding:4px 8px;font-size:12px}.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+  .page{max-width:1040px;margin:0 auto;padding:24px}.card{background:rgba(22,26,32,.94);border:1px solid #2a313d;border-radius:18px;padding:20px}.intro{margin-bottom:28px}.eyebrow{color:#f59e0b;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:700}h1{font-size:42px;line-height:1.05;margin:10px 0 14px}h2{margin:0}p{color:#9da7b3;line-height:1.6}.boundary{border-left:3px solid #f59e0b;padding-left:12px;color:#d8d0c3}.section{margin:28px 0}.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;color:#9da7b3}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}.entry{text-decoration:none;color:#ece7dc;display:flex;flex-direction:column;gap:10px}.entry:hover{border-color:#f59e0b}.entry h3{margin:0;font-size:22px}.entry p{margin:0}.entry-top{display:flex;justify-content:space-between;gap:12px}.type,.status,.tags span{color:#9da7b3;border:1px solid #2a313d;border-radius:999px;padding:4px 8px;font-size:12px}.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
 </style>

@@ -50,7 +50,7 @@
       '',
       `Consent to follow up: ${form.consent ? 'yes' : 'no'}`,
       '',
-      'Boundary: do not paste secrets, passwords, medical details, exact addresses, or anything that should not be in a small-alpha test note.'
+      'Boundary: this is not a secure private channel. Do not paste secrets, passwords, medical details, exact addresses, or anything that should not be in a small-alpha test note.'
     ];
 
     return lines.join('\n');
@@ -81,13 +81,13 @@
     <div class="eyebrow">Tester support</div>
     <h1>Do not leave testers stranded.</h1>
     <p>
-      If a request walkthrough gets confusing, broken, or uncomfortable, capture the problem here. This first pass does not submit anything to a server; it makes a clear note a tester can copy and hand back during a controlled alpha walkthrough.
+      If a request walkthrough gets confusing, broken, or uncomfortable, capture the problem here. This first pass does not submit anything to a server and is not a secure private channel; it makes a clear note a tester can copy and hand back during a controlled alpha walkthrough.
     </p>
   </header>
 
   <section class="card boundary" aria-label="Support boundaries">
     <strong>Small-alpha boundary:</strong>
-    <span>No emergency dispatch, no eligibility decisions, no public posting, and no secrets in the note. If somebody is in immediate danger, use local emergency or crisis services instead of ShopFloor.</span>
+    <span>No emergency dispatch, no eligibility decisions, no public posting, and no secrets in the note. Do not include medical details, passwords, exact addresses, or anything a tester would not want repeated to the operator. If somebody is in immediate danger, use local emergency or crisis services instead of ShopFloor.</span>
   </section>
 
   <form class="card form" onsubmit={(event) => event.preventDefault()}>

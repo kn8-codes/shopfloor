@@ -93,7 +93,8 @@ const fieldNoteSafetyLevels = new Set(['safe', 'temporary', 'janky']);
  * tools_used: string,
  * time_required: string,
  * safety_level: string,
- * neighborhood_tip: string
+ * neighborhood_tip: string,
+ * public_acknowledgement: boolean
  * }} payload */
 export async function createFieldNote(payload) {
   if (!supabaseEnabled || !supabase) {
@@ -114,6 +115,10 @@ export async function createFieldNote(payload) {
     throw new Error('Choose a valid safety / honesty label.');
   }
 
+  if (payload.public_acknowledgement !== true) {
+    throw new Error('Confirm the privacy acknowledgement before saving this restricted field note.');
+  }
+
   const title = requireLength('Title', payload.title, 5, 140);
   const problem = requireLength('Problem', payload.problem, 10, 3000);
   const fix = requireLength('What worked', payload.fix, 10, 5000);
@@ -130,7 +135,9 @@ export async function createFieldNote(payload) {
       tools_used: payload.tools_used.trim() || null,
       time_required: payload.time_required.trim() || null,
       safety_level: payload.safety_level,
-      neighborhood_tip: payload.neighborhood_tip.trim() || null
+      neighborhood_tip: payload.neighborhood_tip.trim() || null,
+      visibility: 'restricted',
+      privacy_acknowledged_at: new Date().toISOString()
     })
     .select('id')
     .single();

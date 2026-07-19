@@ -14,7 +14,9 @@
       <h1>Keep the fix. Don’t lose it in the group chat.</h1>
       <p>
         Field notes preserve what worked after useful help happens: the problem, the fix, the limits,
-        and the neighbor-level lesson. They are not ratings, content bait, or a scoreboard.
+        and the neighbor-level lesson. Only reviewed public notes belong here; new notes start restricted.
+        Leave out private names, phone numbers, exact addresses, and anything that would expose or shame a neighbor.
+        They are not ratings, content bait, or a scoreboard.
       </p>
     </div>
     <a class="secondary" href="/field-notes/new">Write a field note</a>
@@ -29,7 +31,7 @@
   {#if notes.length === 0}
     <div class="empty">
       <h2>No field notes yet.</h2>
-      <p>The first useful proof should come after a helped or resolved request, not from performative posting.</p>
+      <p>The first useful proof should come after a helped or resolved request, not from performative posting. Keep it useful without making a neighbor's situation public content; new notes stay restricted until a reviewed publication path exists.</p>
       <a class="secondary" href="/field-notes/new">Draft the first field note</a>
     </div>
   {:else}

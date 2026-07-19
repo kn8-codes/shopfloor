@@ -15,7 +15,8 @@
     tools_used: '',
     time_required: '',
     safety_level: 'safe',
-    neighborhood_tip: ''
+    neighborhood_tip: '',
+    public_acknowledgement: false
   };
 
   /** @type {Record<string, string>} */
@@ -74,6 +75,12 @@
     if (!hasShopCard) {
       status = 'error';
       message = 'Create your shop card before writing a field note.';
+      return;
+    }
+
+    if (!form.public_acknowledgement) {
+      status = 'error';
+      message = 'Confirm the privacy acknowledgement before saving this restricted field note.';
       return;
     }
 
@@ -197,11 +204,19 @@
       <textarea bind:value={form.neighborhood_tip} rows="3" maxlength="1000" placeholder="What should the next neighbor check first?"></textarea>
     </label>
 
+    <div class="public-check">
+      <label>
+        <input type="checkbox" bind:checked={form.public_acknowledgement} />
+        <span>I removed private names, phone numbers, addresses, and anything that could expose or shame a neighbor. This note will start restricted, not public.</span>
+      </label>
+      <small>Keep sensitive details out anyway. A later publication path must be reviewed before any note becomes public.</small>
+    </div>
+
     <div class="actions">
-      <button type="submit" disabled={!supabaseEnabled || !$authState.user || !hasShopCard || status === 'submitting'}>
+      <button type="submit" disabled={!supabaseEnabled || !$authState.user || !hasShopCard || !form.public_acknowledgement || status === 'submitting'}>
         {status === 'submitting' ? 'Saving...' : 'Save field note'}
       </button>
-      <span class="note">Public release stays gated. Saving here does not deploy, notify anyone, or publish a launch.</span>
+      <span class="note">Public release stays gated. Saving creates a restricted field note; it does not publish, notify anyone, or open a release.</span>
     </div>
 
     {#if message}
@@ -226,5 +241,5 @@
 </div>
 
 <style>
-  .page{max-width:980px;margin:0 auto;padding:24px}.header{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:22px}.eyebrow,.minihead{color:#f59e0b;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:700}h1{margin:10px 0 12px}.secondary{color:#f59e0b;text-decoration:none;font-weight:800}.card{background:rgba(22,26,32,.94);border:1px solid #2a313d;border-radius:18px;padding:20px}.form{display:grid;gap:18px}.notice{margin-bottom:18px;color:#9da7b3}.warn{color:#f5c96a}.two-up{display:grid;grid-template-columns:1fr 1fr;gap:16px}label{display:grid;gap:8px}label span{color:#ece7dc;font-weight:700}small{color:#7c8794;line-height:1.5}input,textarea,select{width:100%;box-sizing:border-box;background:#11151a;border:1px solid #2a313d;border-radius:12px;padding:12px 14px;color:#ece7dc;font:inherit}textarea{resize:vertical}.actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}button{background:#f59e0b;color:#111;border:0;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer}button:disabled{opacity:.55;cursor:not-allowed}.note,.page p{color:#9da7b3;line-height:1.6}.success{color:#73e2aa}.error{color:#ff9c9c}.preview{margin-top:18px}.preview strong{color:#ece7dc}.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.meta span{padding:7px 10px;border-radius:999px;background:#1c222b;border:1px solid #2a313d;color:#9da7b3}.tip{border-left:3px solid #f59e0b;padding-left:12px}@media (max-width:800px){.header{display:block}.two-up{grid-template-columns:1fr}}
+  .page{max-width:980px;margin:0 auto;padding:24px}.header{display:flex;justify-content:space-between;gap:20px;align-items:flex-start;margin-bottom:22px}.eyebrow,.minihead{color:#f59e0b;text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:700}h1{margin:10px 0 12px}.secondary{color:#f59e0b;text-decoration:none;font-weight:800}.card{background:rgba(22,26,32,.94);border:1px solid #2a313d;border-radius:18px;padding:20px}.form{display:grid;gap:18px}.notice{margin-bottom:18px;color:#9da7b3}.warn{color:#f5c96a}.two-up{display:grid;grid-template-columns:1fr 1fr;gap:16px}label{display:grid;gap:8px}label span{color:#ece7dc;font-weight:700}small{color:#7c8794;line-height:1.5}input,textarea,select{width:100%;box-sizing:border-box;background:#11151a;border:1px solid #2a313d;border-radius:12px;padding:12px 14px;color:#ece7dc;font:inherit}textarea{resize:vertical}.public-check{border:1px solid #3b4655;border-radius:14px;padding:14px;background:#141922}.public-check label{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:flex-start}.public-check input{width:auto;margin-top:4px}.actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}button{background:#f59e0b;color:#111;border:0;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer}button:disabled{opacity:.55;cursor:not-allowed}.note,.page p{color:#9da7b3;line-height:1.6}.success{color:#73e2aa}.error{color:#ff9c9c}.preview{margin-top:18px}.preview strong{color:#ece7dc}.meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.meta span{padding:7px 10px;border-radius:999px;background:#1c222b;border:1px solid #2a313d;color:#9da7b3}.tip{border-left:3px solid #f59e0b;padding-left:12px}@media (max-width:800px){.header{display:block}.two-up{grid-template-columns:1fr}}
 </style>

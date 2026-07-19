@@ -13,6 +13,40 @@ Record receipts here. Agent narration is not evidence. Pretty words are how bugs
 - Checked by:
 ```
 
+## 2026-07-19 — Pre-alpha RLS hardening migration ready
+
+- Command/source: added `supabase/migrations/20260719000000_prealpha_privacy_hardening.sql`, aligned `supabase/schema.sql`, and changed field-note creation to persist a privacy acknowledgement and create notes as restricted.
+- Result: new help requests default private; authors can read their own private requests/hidden shop cards; anonymous field-note reads require explicit later publication; new notes require an author-owned restricted insert plus acknowledgement timestamp.
+- Verification: `npm run check` passed with 0 errors / 0 warnings; `npm run build` passed; static schema/migration/app contract checks, `node --check app/src/lib/api.js`, and `git diff --check` passed.
+- Live state: migration is not applied. This checkout has no Supabase CLI, `config.toml`, `psql`, or verified authenticated migration link; no credential or live SQL action occurred.
+- File/path/link: `supabase/migrations/20260719000000_prealpha_privacy_hardening.sql`; `docs/receipts/2026-07-19__prealpha-rls-hardening-migration-ready.md`
+- Checked by: Egon at 2026-07-19
+
+## 2026-07-15 — Public-copy safety boundary pass
+
+- Command/source: reviewed and patched alpha-facing public copy on `/support`, `/field-notes`, `/new-request`, and `/knowledge` after the field-note public acknowledgement guard was added.
+- Result: support now states it is not a secure private channel and warns against medical details, passwords, and exact addresses; field-note list copy now says notes are public-readable and should not expose/shame neighbors; new-request copy no longer says live backend is future tense and clarifies safe-to-share/public-feed behavior; knowledge base now says starter entries are not professional advice, emergency instructions, or endorsements.
+- Verification: from `app/`, `npm run check` passed with 0 errors / 0 warnings; `npm run build` passed with expected adapter-auto warning only. Local preview route smoke with `PUBLIC_SHOPFLOOR_PUBLIC_RELEASE=true` returned marker hits for all four surfaces.
+- File/path/link: `app/src/routes/support/+page.svelte`; `app/src/routes/field-notes/+page.svelte`; `app/src/routes/new-request/+page.svelte`; `app/src/routes/knowledge/+page.svelte`; receipt `/mesh/30_RECEIPTS/egon/2026-07-15__shopfloor-public-copy-safety-boundary-pass.md`
+- Checked by: Egon at 2026-07-15 21:50 EDT
+
+## 2026-07-15 — Field-note public-read acknowledgement guard added
+
+- Command/source: after read-only Supabase verification passed twice, added a required field-note public-read acknowledgement to `/field-notes/new` and API helper validation in `createFieldNote()`. No live DB writes, schema changes, deploys, or release-gate changes were performed.
+- Result: users cannot save a field note through the current app UI/helper unless they acknowledge the note is public-readable and confirm private names, phone numbers, addresses, and neighbor-exposing/shaming details were removed.
+- Verification: from `app/`, `npm run check` passed with 0 errors / 0 warnings; `npm run build` passed with expected adapter-auto warning only. Local preview route smoke with `PUBLIC_SHOPFLOOR_PUBLIC_RELEASE=true` returned HTTP 200 for `/field-notes/new` and contained `I understand this field note is public-readable`, `removed private names, phone numbers, addresses`, `public field-note archive`, and `Save field note`.
+- File/path/link: `app/src/routes/field-notes/new/+page.svelte`; `app/src/lib/api.js`; receipt `/mesh/30_RECEIPTS/egon/2026-07-15__shopfloor-field-note-public-ack-guard.md`
+- Checked by: Egon at 2026-07-15 21:43 EDT
+
+## 2026-07-15 — Live read-only Supabase privacy probe passed
+
+- Command/source: after Nate approved `APPROVE SHOPFLOOR SUPABASE READ-ONLY VERIFY`, loaded local `app/.env` without printing values, verified the configured Supabase host resolves/responds, and ran read-only anon probes only. No write-denial probes, migrations, service-role SQL, deploys, or data writes were run.
+- Result: the old project-DNS blocker is cleared. Supabase project host DNS resolved; project root returned HTTP 404 and `/rest/v1/` returned HTTP 401 without a key, proving the project surface is reachable. With the anon key, read-only privacy probe passed: `shop_cards` visible count 2, safe `help_requests` visible count 1, `help_requests_with_author` visible count 1, public `field_notes` count 0.
+- Additional read-only check: visible help request rows had `unsafe_visible_count=0`, `disallowed_status_count=0`, and statuses seen `[open]`; `help_requests_with_author` count matched base visible `help_requests` count.
+- Credential note: Gatekeeper Proton Pass `Agents Vault` was reachable and contained Supabase items, but the item titled `Supabase Access Token — CLI` returned HTTP 403 against Supabase management `/v1/projects`; it was not usable for management/schema metadata inspection in this run. Service-role item was not used.
+- File/path/link: `scripts/shopfloor_privacy_probe.mjs`; receipt `/mesh/30_RECEIPTS/egon/2026-07-15__shopfloor-supabase-readonly-live-verify.md`
+- Checked by: Egon at 2026-07-15 21:30 EDT
+
 ## 2026-07-13 — Live read-only privacy probe blocked by Supabase project DNS
 
 - Command/source: after Nate approved `APPROVE SHOPFLOOR LIVE PRIVACY VERIFY`, ran the privacy probe in read-only mode only using local `app/.env` without printing secret values.
