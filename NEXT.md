@@ -1,6 +1,6 @@
 # NEXT.md — ShopFloor
 
-_Last updated: 2026-07-19_
+_Last updated: 2026-07-22_
 
 ## What this project is
 
@@ -15,9 +15,9 @@ Current mission frame: **Aid is the visible action. Relationship is the infrastr
 Repo: `https://github.com/kn8-codes/shopfloor`  
 Canonical branch: `main`  
 Current HEAD: see `git log --oneline -1` locally; this file avoids self-referential commit churn.  
-Current verified implementation commit: `f606516 Harden ShopFloor private proof gate`
+Current verified implementation commit: `303fde1` or later local `main`; check `git log --oneline -1` before implementation.
 
-ShopFloor has a SvelteKit app under `app/`, Supabase schema under `supabase/schema.sql`, product docs under `docs/`, a file-backed Markdown knowledge base under `app/src/lib/content/kb/`, an explicit public release gate, tester support intake, field-note creation v0, and AgentsRoom team scaffolding under `AGENTSROOM_TEAM/`.
+ShopFloor has a SvelteKit app under `app/`, Supabase schema under `supabase/schema.sql`, product docs under `docs/`, a file-backed Markdown knowledge base under `app/src/lib/content/kb/`, an explicit public release gate, tester support intake, field-note creation v0, AgentsRoom team scaffolding under `AGENTSROOM_TEAM/`, and a local-only alpha readiness/orientation packet at `docs/plans/2026-07-22-shopfloor-alpha-readiness-orientation-packet.md`.
 
 ## Current verified app shape
 
@@ -136,9 +136,11 @@ Caveat: starter KB entries still need Nate review before being treated as author
 
 ## Current gaps / blockers
 
-1. **Authenticated-role RLS proof**
-   - Migration `20260719000000_prealpha_privacy_hardening.sql` is applied to the verified linked Supabase project; anonymous read/write-denial proof passed.
-   - Controlled author/unrelated-user proof is still approval-gated because it requires test accounts/data and an explicit cleanup or retention decision. Do not use real neighbor data.
+1. **Private walkthrough still gated**
+   - Migration `20260719000000_prealpha_privacy_hardening.sql` is applied to the verified linked Supabase project.
+   - Anonymous proof passed.
+   - Controlled authenticated author/unrelated-user proof passed on 2026-07-22 with synthetic data and cleanup.
+   - Do not use real neighbor/tester data until Nate approves the private walkthrough/support handling.
 
 2. **Request response / completion missing**
    - Help request creation exists.
@@ -158,21 +160,22 @@ Caveat: starter KB entries still need Nate review before being treated as author
 
 ## Highest-priority next move
 
-The pre-alpha RLS hardening migration is applied:
+The pre-alpha RLS hardening migration and proofs are complete:
 
 ```text
-RLS_HARDENING_APPLIED_ANON_PROOF_PASSED
+RLS_HARDENING_APPLIED_AUTHENTICATED_PROOF_PASSED
 ```
 
 - Remote migration history records `20260719000000_prealpha_privacy_hardening.sql`; it restricts new field notes by default, makes public reads publication-only, persists acknowledgements, and closes owner-read gaps.
 - Post-apply anonymous proof passed: protected-row inserts were denied with RLS `42501`; no probe data was created; public field-note count remains zero.
-- Remaining gate: controlled authenticated author/unrelated-user tests need separate approval because they require test identities/data and cleanup policy.
+- Controlled authenticated-role proof passed on 2026-07-22 with synthetic data and cleanup: author could create/read own private request, restricted Field Note, and hidden shop card; unrelated user and anonymous reads were denied; unrelated author-spoof insert was denied; `help_requests_with_author` preserved RLS; cleanup left zero synthetic rows/users.
+- Local-only Alpha Readiness + Orientation packet exists at `docs/plans/2026-07-22-shopfloor-alpha-readiness-orientation-packet.md`.
 
 Next useful gate options:
 
-1. Approve a bounded controlled authenticated-role RLS proof with test-account/data cleanup plan.
-2. Keep the public release gate closed and external tester data out until that proof passes.
-3. Then run a private internal walkthrough against the applied schema.
+1. Review the Alpha Readiness + Orientation packet.
+2. Approve a controlled private walkthrough plan with synthetic data only.
+3. Keep the public release gate closed and external tester data out until that walkthrough/support handling is explicitly approved.
 4. Only then consider support-ticket persistence or request-response/completion.
 
 ## If another agent picks this up

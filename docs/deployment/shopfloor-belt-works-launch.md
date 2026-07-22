@@ -178,17 +178,30 @@ http://127.0.0.1:5173
 
 ### Pre-release data safety checks
 
+Current proof state as of 2026-07-22:
+
+- anonymous write-denial proof passed after `20260719000000_prealpha_privacy_hardening.sql` was applied;
+- controlled authenticated-role proof passed with synthetic data and cleanup;
+- no real neighbor/tester data was used;
+- public release gate stayed closed.
+
 Before opening the gate:
 
-1. Confirm anon read behavior:
+1. Confirm anon read behavior remains true:
    - visible shop cards are readable;
    - non-visible shop cards are not readable;
    - only safe/open-ish help requests are readable;
    - `help_requests_with_author` respects RLS through `security_invoker`.
 2. Confirm anon cannot insert without auth.
-3. Confirm signed-in user can only create/update their own shop card and requests.
+3. Confirm signed-in user can only create/read their own private/restricted rows unless separately published/shared.
 4. Confirm sample/demo fallback language is honest if Supabase is absent or failing.
 5. Confirm no real user private contact info is shown publicly by default.
+6. Confirm support/withdrawal handling before any external tester data.
+7. Preserve receipt pointer:
+
+```text
+/Users/kn8/.hermes/kanban/boards/mesh-open-loops/attachments/t_a0cd55cf/2026-07-22__shopfloor-authenticated-role-rls-proof-passed.md
+```
 
 ## Local verification commands
 
@@ -222,11 +235,12 @@ curl -fsS http://127.0.0.1:4183/new-request | grep -q 'Post the real problem'
 
 Do not open public release until all are true:
 
-- [ ] Vercel project deploys `main` from `app/` root.
-- [ ] `shopfloor.belt.works` resolves and serves HTTPS.
-- [ ] Closed gate verified on production.
-- [ ] Supabase env vars are set but no secrets are in repo/receipts.
-- [ ] RLS/auth behavior verified against live Supabase.
+- [x] Vercel project serves `shopfloor.belt.works` behind the closed app release gate.
+- [x] `shopfloor.belt.works` resolves and serves HTTPS.
+- [x] Closed gate verified on production.
+- [x] Supabase env vars are set in hosting without secrets in repo/receipts.
+- [x] RLS/auth behavior verified against live Supabase with anonymous and controlled authenticated synthetic-data proofs.
+- [ ] Support/withdrawal/private-walkthrough handling approved before real external tester data.
 - [ ] Nate explicitly approves opening public alpha.
 - [ ] `PUBLIC_SHOPFLOOR_PUBLIC_RELEASE=true` is set only after that approval.
 

@@ -1,6 +1,6 @@
 # Current State — ShopFloor
 
-_Last updated: 2026-07-19_
+_Last updated: 2026-07-22_
 
 ## Active Goal
 
@@ -23,11 +23,11 @@ Current verified technical state:
 - Repo: `https://github.com/kn8-codes/shopfloor`
 - Canonical branch: `main`
 - Current HEAD: see `git log --oneline -1` locally; this state file intentionally avoids self-referential commit churn.
-- Current verified implementation commit: `f606516 Harden ShopFloor private proof gate`
+- Current verified implementation commit: `303fde1` or later local `main`; check `git log --oneline -1` before implementation.
 - Tracking state: `main...origin/main`
 - App root: `app/`
-- Verification timestamp: 2026-07-13 05:49 EDT
-- Latest verification commands include `node --check scripts/shopfloor_privacy_probe.mjs`, probe explicit-gate smoke, `npm run check`, `npm run build`, and local dry route smoke for `/support`, `/field-notes`, and `/field-notes/new`.
+- Verification timestamp: 2026-07-22 03:21 EDT
+- Latest verified milestone: `shopfloor.belt.works` is live behind the closed release gate, Alpha Loop Lock v1 is approved internally, and the controlled authenticated-role RLS proof passed with synthetic data and cleanup. Local-only orientation/readiness packet exists at `docs/plans/2026-07-22-shopfloor-alpha-readiness-orientation-packet.md`.
 
 ## What Seems Done
 
@@ -88,7 +88,8 @@ Historical evidence from 2026-05-25 describes request responses, completion, and
 2. **Privacy / RLS gate**
    - Migration `20260719000000_prealpha_privacy_hardening.sql` is applied to the verified linked Supabase project.
    - Post-apply anonymous proof passed: protected-row inserts were denied with RLS `42501`; public field-note count remains 0.
-   - Do not accept external tester data until separately approved controlled author/unrelated-user proof passes with test-data cleanup/retention decided.
+   - Controlled authenticated author/unrelated-user proof passed on 2026-07-22 using synthetic data and cleanup: author could create/read own private request/restricted Field Note/hidden shop card; unrelated signed-in user and anonymous reads were denied; unrelated author spoof insert was denied; `help_requests_with_author` did not bypass RLS; cleanup left zero synthetic rows/users.
+   - Do not accept external tester data until Nate separately approves the first private/internal walkthrough and support handling.
 
 3. **Public copy gate**
    - `/support`, `/field-notes`, `/new-request`, and `/knowledge` received a local safety-boundary pass on 2026-07-15.
@@ -100,35 +101,38 @@ Historical evidence from 2026-05-25 describes request responses, completion, and
 
 ## Recommended Next Slice
 
-Latest completed live slice: **pre-alpha RLS hardening applied; anonymous proof passed**.
+Latest completed live slice: **pre-alpha RLS hardening applied; anonymous and controlled authenticated proofs passed**.
 
 ```text
-RLS_HARDENING_APPLIED_ANON_PROOF_PASSED
+RLS_HARDENING_APPLIED_AUTHENTICATED_PROOF_PASSED
 ```
 
 What changed:
 
 - remote migration history records `20260719000000_prealpha_privacy_hardening.sql`;
+- `shopfloor.belt.works` resolves and serves the closed Vercel launch gate;
 - new help requests default private; field notes are restricted by default and publication-only for anonymous reads; the app persists a privacy acknowledgement;
-- post-apply anonymous proof passed: attempts to insert shop cards, help requests, and field notes were denied by RLS `42501`, and no probe data was created.
+- post-apply anonymous proof passed: attempts to insert shop cards, help requests, and field notes were denied by RLS `42501`, and no probe data was created;
+- controlled authenticated-role proof passed with synthetic data and cleanup: own private rows were readable by author only, unrelated/anonymous reads were denied, spoofed-author insert was denied, and `help_requests_with_author` preserved RLS.
 
 Remaining state:
 
-- no public release/deploy/GitHub push/service-role access occurred;
-- controlled authenticated author/unrelated-user proof still needs separate approval because it requires test accounts/data and a cleanup or retention decision.
+- no public release gate opening occurred;
+- no real neighbor/tester data was used;
+- local-only orientation/readiness packet exists at `docs/plans/2026-07-22-shopfloor-alpha-readiness-orientation-packet.md`.
 
 Recommended next actions:
 
-1. Approve a bounded authenticated-role RLS proof using controlled non-neighbor test accounts/data and explicit cleanup.
-2. Keep the public release gate closed and external tester data out until that proof passes.
-3. Then run the private walkthrough and decide whether to design support persistence or request-response/completion.
+1. Keep the public release gate closed and external tester data out.
+2. Review the orientation/readiness packet and decide the first controlled private walkthrough shape.
+3. Then decide whether to design support persistence or request-response/completion.
 
 ## Blockers
 
-- Authenticated-role RLS proof needs an explicit controlled-test-data and cleanup/retention authorization.
 - Need Nate approval before opening public release gate or changing public-facing promises.
 - Need support ownership design before persistent support intake.
+- Need private walkthrough approval before using external tester/neighbor data.
 
 ## Last Verified
 
-2026-07-19 — Applied `20260719000000_prealpha_privacy_hardening.sql` through the verified linked Supabase CLI after a clean dry-run and Nate’s explicit approval. Remote migration history matches. Post-apply anonymous read/write-denial proof passed; no secrets printed and no probe data persisted.
+2026-07-22 — `shopfloor.belt.works` was previously verified live behind the closed release gate; Alpha Loop Lock v1 is approved internally; controlled authenticated-role RLS proof passed with synthetic data and cleanup; local-only orientation/readiness packet added under `docs/plans/`.

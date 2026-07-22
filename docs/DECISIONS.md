@@ -138,3 +138,20 @@ Public user feedback shows the phrasing is unclear or the product mechanics drif
 
 **Source:**  
 Belt/ShopFloor public statement draft and Sprint 1 alignment conversation 2026-06-09.
+
+## 2026-07-22 — Alpha Loop Lock v1 and Field Notes memory role
+
+**Decision:**
+ShopFloor Alpha Loop v1 is an internal loop: public promise → safe request framing → local help/triage → restricted Field Note → support feedback. Field Notes are restricted-first memory/proof infrastructure, not public content, ratings, endorsements, service listings, or professional certification.
+
+**Why:**
+The current product needs one coherent proof loop before more public release work. Field Notes are the conversion point from help event to local memory: requests name what is stuck, shop cards show possible capability, the knowledge base holds reviewed reusable guidance, and Field Notes record what actually happened without exposing neighbors.
+
+**Alternatives rejected:**
+Opening the public release gate, using real neighbor/tester data, turning Field Notes into public engagement content, treating ShopFloor as a service catalog, adding ratings/bidding/leaderboards, or claiming response/completion/ledger features that current code does not implement.
+
+**Revisit when:**
+Nate approves a private walkthrough, a moderation/withdrawal owner is named, or the first controlled help loop proves that restricted notes can safely become public/local knowledge.
+
+**Source:**
+`docs/plans/2026-07-22-shopfloor-alpha-readiness-orientation-packet.md`; authenticated RLS proof receipt `/Users/kn8/.hermes/kanban/boards/mesh-open-loops/attachments/t_a0cd55cf/2026-07-22__shopfloor-authenticated-role-rls-proof-passed.md`.

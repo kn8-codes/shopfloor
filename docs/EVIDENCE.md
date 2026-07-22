@@ -13,6 +13,15 @@ Record receipts here. Agent narration is not evidence. Pretty words are how bugs
 - Checked by:
 ```
 
+## 2026-07-22 — Sleep-work list: alpha readiness/orientation packet and state truth update
+
+- Command/source: Nate approved `APPROVE SHOPFLOOR SLEEP WORK — LOCAL ONLY, NO COMMIT/PUSH/DEPLOY/PUBLISH`; read the parked later-work list and current ShopFloor/Belt artifacts; updated local repo docs only.
+- Result: added `docs/plans/2026-07-22-shopfloor-alpha-readiness-orientation-packet.md`, consolidating authenticated RLS proof follow-through, Belt.works homepage relationship copy, ShopFloor orientation, Field Notes copy guardrails, and help-loop unification. Updated `STATE.md`, `NEXT.md`, `docs/deployment/shopfloor-belt-works-launch.md`, and `docs/DECISIONS.md` so future agents no longer treat authenticated RLS proof as pending.
+- Verification boundary: no code/site route files changed, so no app build was required for runtime behavior. Verification for this doc/state batch used file reads, `git diff --check`, targeted grep checks for stale `authenticated-role RLS proof` pending language, and `git status --short --branch`.
+- Guardrails: no commit, push, deploy, public release gate opening, DNS/Vercel/Supabase mutation, real data, credential access, deletion, or dependency changes.
+- File/path/link: `docs/plans/2026-07-22-shopfloor-alpha-readiness-orientation-packet.md`; `docs/receipts/2026-07-22__sleep-work-alpha-readiness-local.md`; board approval packet `/Users/kn8/.hermes/kanban/boards/mesh-open-loops/attachments/2026-07-22__shopfloor-sleep-work-approval-packet.md`.
+- Checked by: Egon at 2026-07-22 03:21 EDT
+
 ## 2026-07-19 — Pre-alpha RLS hardening applied and anonymous proof passed
 
 - Command/source: authenticated and linked Supabase CLI v2.109.1; confirmed a linked dry-run would apply only `20260719000000_prealpha_privacy_hardening.sql`; after Nate’s explicit go, applied it with `supabase db push --linked --yes`.
